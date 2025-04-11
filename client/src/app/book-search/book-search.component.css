@@ -1,0 +1,32 @@
+.search-container {
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 8px;
+  width: 250px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 8px 12px;
+}
+
+.results {
+  margin-top: 30px;
+}
+
+.book-card {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.book-card h3 {
+  margin: 0;
+}
+
+.book img {
+  width: 100px; /* Justera storleken på bilder */
+  height: auto;
+  margin-top: 10px;
+}

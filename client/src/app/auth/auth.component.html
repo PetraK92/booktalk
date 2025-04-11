@@ -1,0 +1,27 @@
+<h2>{{ isLoginMode ? "Logga in" : "Registrera dig" }}</h2>
+
+<form (ngSubmit)="onSubmit()">
+  <input
+    type="email"
+    [(ngModel)]="email"
+    name="email"
+    placeholder="Email"
+    required
+  />
+  <input
+    type="password"
+    [(ngModel)]="password"
+    name="password"
+    placeholder="Lösenord"
+    required
+  />
+  <button type="submit">{{ isLoginMode ? "Logga in" : "Registrera" }}</button>
+</form>
+
+<button (click)="toggleMode()">
+  {{
+    isLoginMode
+      ? "Har inget konto? Registrera dig"
+      : "Har redan ett konto? Logga in"
+  }}
+</button>

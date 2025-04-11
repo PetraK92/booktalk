@@ -1,19 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { BookSearchComponent } from './book-search/book-search.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  standalone: true,
+  imports: [BookSearchComponent],
+  template: `<app-book-search></app-book-search>`,
 })
-export class AppComponent {
-  title = 'client';
-
-  constructor(private http: HttpClient) {
-    this.http.get('/api/tasks').subscribe((tasks) => {
-      console.log(tasks);
-    });
-  }
-}
+export class AppComponent {}
