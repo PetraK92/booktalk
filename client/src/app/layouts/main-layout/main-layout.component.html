@@ -1,0 +1,21 @@
+<header class="header">
+  <div class="logo">
+    <img src="assets/logo.png" alt="Logo" />
+  </div>
+  <nav>
+    <ul>
+      <li><a routerLink="/">Home</a></li>
+      <li><a routerLink="/mybooks">My Books</a></li>
+      <li><a routerLink="/community">Community</a></li>
+    </ul>
+  </nav>
+  <app-book-search></app-book-search>
+  <app-auth></app-auth>
+</header>
+<router-outlet></router-outlet>
+<footer>
+  <div class="footer">
+    <p>&copy; 2025 Booktalk. All rights reserved.</p>
+    <p><a href="/privacy-policy">Privacy Policy</a></p>
+  </div>
+</footer>

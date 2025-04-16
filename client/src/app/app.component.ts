@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { BookSearchComponent } from './book-search/book-search.component';
+import { RouterOutlet } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BookSearchComponent],
-  template: `<app-book-search></app-book-search>`,
+  imports: [RouterOutlet, LucideAngularModule],
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent {}

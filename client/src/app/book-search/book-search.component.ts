@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { BookService } from '../book.service';
 import Fuse from 'fuse.js';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-book-search',
@@ -18,22 +17,12 @@ export class BookSearchComponent {
   searchResults: any[] = [];
   fuse: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private bookService: BookService) {}
 
   searchBooks() {
     if (!this.searchTerm.trim()) return;
 
-    // Dela upp sökterm på komma om författare finns
-    const searchParts = this.searchTerm.split(',');
-    const title = encodeURIComponent(searchParts[0].trim()); // Titel
-    const author = searchParts[1]
-      ? `+inauthor:${encodeURIComponent(searchParts[1].trim())}`
-      : ''; // Författare om det finns
-
-    // Bygg URL från environment.ts
-    const url = `${environment.googleBooksApi.baseUrl}intitle:${title}${author}&maxResults=${environment.googleBooksApi.maxResults}`;
-
-    this.http.get(url).subscribe((res: any) => {
+    this.bookService.searchBooks(this.searchTerm).subscribe((res: any) => {
       this.books = res.items || [];
       this.searchResults = this.books;
 

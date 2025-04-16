@@ -1,0 +1,11 @@
+<div class="popular-books">
+  <h2>Populära böcker</h2>
+  <div class="book-list">
+    <div class="book-card" *ngFor="let book of popularBooks">
+      <img
+        [src]="book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'"
+        [alt]="book.volumeInfo.title"
+      />
+    </div>
+  </div>
+</div>

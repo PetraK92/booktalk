@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f5f5f5;
+}
+
+.logo img {
+  height: 50px;
+}
+
+app-book-search {
+  flex-grow: 1; /* Gör så att sökrutan tar upp all ledig plats */
+  margin: 0 2rem; /* Lite marginal mellan sökfältet och menyn */
+}
+
+nav ul {
+  display: flex;
+  gap: 1.5rem; /* Avstånd mellan menyalternativen */
+  list-style: none; /* Tar bort punkterna från listan */
+  padding: 0;
+  margin: 0;
+}
+
+nav li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.2s ease-in-out; /* Mjuk övergång när man hovrar */
+}
+
+nav li a:hover {
+  color: #007bff;
+}
