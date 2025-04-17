@@ -29,6 +29,10 @@ export class AuthComponent {
         .login(this.email, this.password)
         .then((res) => {
           console.log('Inloggad:', res.user?.email);
+
+          this.email = '';
+          this.password = '';
+
           // After a successful login, fetch the user document from Firestore.
           if (res.user && res.user.uid) {
             const userRef = doc(this.firestore, 'users', res.user.uid);
@@ -58,6 +62,9 @@ export class AuthComponent {
               'Registration complete and user document created:',
               res.user.uid
             );
+
+            this.email = '';
+            this.password = '';
           }
         })
         .catch((err) => alert('Fel vid registrering: ' + err.message));

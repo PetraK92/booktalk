@@ -1,4 +1,4 @@
-<!-- Lägg till en sökruta -->
+<!-- Sökruta -->
 <input
   type="text"
   [(ngModel)]="searchTerm"
@@ -6,21 +6,10 @@
   placeholder="Search for books or authors"
 />
 
-<div *ngIf="searchResults.length > 0">
-  <div *ngFor="let book of searchResults">
-    <div class="book">
-      <h3>{{ book.volumeInfo.title }}</h3>
-      <p *ngIf="book.volumeInfo.authors">
-        Author: {{ book.volumeInfo.authors.join(", ") }}
-      </p>
-
-      <img
-        *ngIf="book.volumeInfo.imageLinks?.thumbnail"
-        [src]="book.volumeInfo.imageLinks.thumbnail"
-        alt="Book image"
-      />
-
-      <p>{{ book.volumeInfo.description || "No description available" }}</p>
-    </div>
-  </div>
+<!-- Lista av sökresultat -->
+<div *ngIf="searchResults.length > 0" class="book-list">
+  <app-book-card
+    *ngFor="let book of searchResults"
+    [book]="book"
+  ></app-book-card>
 </div>

@@ -10,7 +10,7 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: 'details', component: BookDetailsComponent },
+      { path: 'books/:id', component: BookDetailsComponent },
     ],
   },
   { path: 'admin', component: AdminComponent },

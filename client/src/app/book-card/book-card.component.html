@@ -1,0 +1,13 @@
+<a [routerLink]="['/books', book.id]" class="book-card">
+  <img
+    *ngIf="book.volumeInfo.imageLinks?.thumbnail"
+    [src]="book.volumeInfo.imageLinks.thumbnail"
+    alt="Book image"
+  />
+  <h3>{{ book.volumeInfo.title }}</h3>
+  <p *ngIf="book.volumeInfo.authors">
+    {{ book.volumeInfo.authors.join(", ") }}
+  </p>
+  <p>{{ book.id }}</p>
+  <!-- Lägg till denna för att logga ut bokens ID -->
+</a>
