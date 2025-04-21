@@ -1,0 +1,5 @@
+<div class="welcome-container">
+  <h2 *ngIf="user$ | async as user">
+    Welcome, {{ user.displayName || user.email || "Användare" }}!
+  </h2>
+</div>

@@ -1,3 +1,10 @@
+.book-details-wrapper {
+  background-color: #ecefdf; /* Bakgrund utanför själva komponenten */
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
 /* Layouten delas i två: bild och info */
 .book-details-container {
   display: flex;
@@ -6,7 +13,7 @@
   margin: 0 auto;
   padding: 2rem;
   gap: 2rem;
-  background-color: #fff;
+  background-color: #d6ddba;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }

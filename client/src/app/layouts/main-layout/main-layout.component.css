@@ -3,11 +3,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #f5f5f5;
+  background-color: #889e6a;
 }
 
 .logo img {
-  height: 50px;
+  height: 60px;
+  padding-right: 1.5rem;
 }
 
 app-book-search {
@@ -25,11 +26,22 @@ nav ul {
 
 nav li a {
   text-decoration: none;
-  color: #333;
+  color: #3b3b3b;
   font-weight: bold;
   transition: color 0.2s ease-in-out; /* Mjuk övergång när man hovrar */
 }
 
 nav li a:hover {
-  color: #007bff;
+  background-color: #d6ddba;
+  padding: 0.3rem;
+}
+
+.footer {
+  background-color: #d6ddba;
+  color: #3b3b3b;
+  padding: 20px;
+}
+
+.footer a {
+  color: #3b3b3b;
 }

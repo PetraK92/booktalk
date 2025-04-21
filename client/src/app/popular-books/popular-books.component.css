@@ -2,9 +2,10 @@
   width: 100%;
   max-width: 650px;
   padding: 1rem;
+  margin: 20px;
   border: 1px solid #ccc; /* Ljusgrå ram */
   border-radius: 12px; /* Rundade hörn på hela sektionen */
-  background-color: #f9f9f9; /* Ljus bakgrund för kontrast */
+  background-color: #d6ddba;
 }
 
 .book-list {

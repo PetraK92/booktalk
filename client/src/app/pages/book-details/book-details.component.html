@@ -1,56 +1,58 @@
-<div class="book-details-container" *ngIf="bookDetails; else loading">
-  <!-- Bokbild -->
-  <div class="book-image">
-    <img
-      [src]="bookDetails?.imageLinks?.thumbnail || 'assets/no-cover.png'"
-      alt="Book image"
-    />
+<div class="book-details-wrapper">
+  <div class="book-details-container" *ngIf="bookDetails; else loading">
+    <!-- Bokbild -->
+    <div class="book-image">
+      <img
+        [src]="bookDetails?.imageLinks?.thumbnail || 'assets/no-cover.png'"
+        alt="Book image"
+      />
+    </div>
+
+    <!-- Bokinformation -->
+    <div class="book-info">
+      <h2>{{ bookDetails?.title }}</h2>
+
+      <p *ngIf="bookDetails?.authors?.length">
+        <strong>Author:</strong> {{ bookDetails?.authors?.join(", ") }}
+      </p>
+
+      <p *ngIf="bookDetails?.publisher">
+        <strong>Publisher:</strong> {{ bookDetails?.publisher }}
+      </p>
+
+      <p *ngIf="bookDetails?.publishedDate">
+        <strong>Published:</strong> {{ bookDetails?.publishedDate }}
+      </p>
+
+      <p *ngIf="bookDetails?.averageRating">
+        <strong>Rating:</strong> {{ bookDetails?.averageRating }} / 5
+      </p>
+
+      <p *ngIf="bookDetails?.categories?.length">
+        <strong>Genres:</strong> {{ bookDetails?.categories?.join(", ") }}
+      </p>
+
+      <p *ngIf="bookDetails?.pageCount">
+        <strong>Pages:</strong> {{ bookDetails?.pageCount }}
+      </p>
+
+      <p *ngIf="bookDetails?.subtitle">
+        <strong>Series/Subtitle:</strong> {{ bookDetails?.subtitle }}
+      </p>
+
+      <p *ngIf="bookDetails?.description">
+        <strong>Description:</strong>
+      </p>
+      <div
+        *ngIf="bookDetails?.description"
+        [innerHTML]="bookDetails?.description"
+      ></div>
+    </div>
   </div>
 
-  <!-- Bokinformation -->
-  <div class="book-info">
-    <h2>{{ bookDetails?.title }}</h2>
+  <ng-template #loading>
+    <p>Loading book details...</p>
+  </ng-template>
 
-    <p *ngIf="bookDetails?.authors?.length">
-      <strong>Author:</strong> {{ bookDetails?.authors?.join(", ") }}
-    </p>
-
-    <p *ngIf="bookDetails?.publisher">
-      <strong>Publisher:</strong> {{ bookDetails?.publisher }}
-    </p>
-
-    <p *ngIf="bookDetails?.publishedDate">
-      <strong>Published:</strong> {{ bookDetails?.publishedDate }}
-    </p>
-
-    <p *ngIf="bookDetails?.averageRating">
-      <strong>Rating:</strong> {{ bookDetails?.averageRating }} / 5
-    </p>
-
-    <p *ngIf="bookDetails?.categories?.length">
-      <strong>Genres:</strong> {{ bookDetails?.categories?.join(", ") }}
-    </p>
-
-    <p *ngIf="bookDetails?.pageCount">
-      <strong>Pages:</strong> {{ bookDetails?.pageCount }}
-    </p>
-
-    <p *ngIf="bookDetails?.subtitle">
-      <strong>Series/Subtitle:</strong> {{ bookDetails?.subtitle }}
-    </p>
-
-    <p *ngIf="bookDetails?.description">
-      <strong>Description:</strong>
-    </p>
-    <div
-      *ngIf="bookDetails?.description"
-      [innerHTML]="bookDetails?.description"
-    ></div>
-  </div>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </div>
-
-<ng-template #loading>
-  <p>Loading book details...</p>
-</ng-template>
-
-<p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
