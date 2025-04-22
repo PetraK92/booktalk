@@ -1,11 +1,10 @@
 .book-details-wrapper {
-  background-color: #ecefdf; /* Bakgrund utanför själva komponenten */
+  background-color: #ecefdf;
   padding: 3rem;
   display: flex;
   justify-content: center;
 }
 
-/* Layouten delas i två: bild och info */
 .book-details-container {
   display: flex;
   flex-wrap: wrap;
@@ -18,7 +17,6 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Bilden till vänster */
 .book-image img {
   width: 220px;
   height: auto;
@@ -27,7 +25,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Info-delen */
 .book-info {
   flex: 1;
   display: flex;
@@ -35,13 +32,11 @@
   gap: 1rem;
 }
 
-/* Titel */
 .book-info h2 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
 
-/* Labels (Author, Publisher, etc.) */
 .book-info p {
   font-size: 1rem;
   margin: 0;
@@ -53,13 +48,11 @@
   color: #444;
 }
 
-/* Beskrivning */
 .book-info div {
   font-size: 0.95rem;
   color: #333;
 }
 
-/* Ladda / felmeddelande */
 .error-message {
   color: red;
   font-weight: bold;
@@ -67,7 +60,6 @@
   margin-top: 2rem;
 }
 
-/* Responsiv design */
 @media (max-width: 768px) {
   .book-details-container {
     flex-direction: column;

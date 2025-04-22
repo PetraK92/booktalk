@@ -1,8 +1,7 @@
 <header class="header">
   <div class="logo">
-    <!-- Rätt användning av routerLink -->
     <a [routerLink]="''">
-      <img src="images\booktalklogga4.png" alt="Logo" class="logo" />
+      <img src="images/booktalklogga4.png" alt="Logo" class="logo" />
     </a>
   </div>
   <nav>
@@ -13,9 +12,18 @@
     </ul>
   </nav>
   <app-book-search></app-book-search>
+
+  <!-- Auth dropdown component -->
   <app-auth></app-auth>
+
+  <!-- Profile Icon (User profile) -->
+  <a [routerLink]="'/profil'">
+    <i class="bi bi-person-circle"></i>
+  </a>
 </header>
+
 <router-outlet></router-outlet>
+
 <footer>
   <div class="footer">
     <p>&copy; 2025 Booktalk. All rights reserved.</p>

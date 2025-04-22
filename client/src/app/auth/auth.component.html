@@ -1,27 +1,60 @@
-<h2>{{ isLoginMode ? "Logga in" : "Registrera dig" }}</h2>
+<div class="auth-dropdowns" *ngIf="!user; else loggedIn">
+  <!-- Sign In Dropdown -->
+  <div class="auth-dropdown">
+    <button class="dropdown-toggle" (click)="toggleDropdown('signin')">
+      Sign In
+    </button>
+    <div class="dropdown-content" *ngIf="visibleDropdown === 'signin'">
+      <form (ngSubmit)="onSubmit(true)" class="auth-form">
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Log in</button>
+      </form>
+    </div>
+  </div>
 
-<form (ngSubmit)="onSubmit()">
-  <input
-    type="email"
-    [(ngModel)]="email"
-    name="email"
-    placeholder="Email"
-    required
-  />
-  <input
-    type="password"
-    [(ngModel)]="password"
-    name="password"
-    placeholder="Lösenord"
-    required
-  />
-  <button type="submit">{{ isLoginMode ? "Logga in" : "Registrera" }}</button>
-</form>
+  <!-- Sign Up Dropdown -->
+  <div class="auth-dropdown">
+    <button class="dropdown-toggle" (click)="toggleDropdown('signup')">
+      Sign Up
+    </button>
+    <div class="dropdown-content" *ngIf="visibleDropdown === 'signup'">
+      <form (ngSubmit)="onSubmit(false)" class="auth-form">
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
 
-<button (click)="toggleMode()">
-  {{
-    isLoginMode
-      ? "Har inget konto? Registrera dig"
-      : "Har redan ett konto? Logga in"
-  }}
-</button>
+<!-- Om användaren är inloggad -->
+<ng-template #loggedIn>
+  <div class="auth-dropdown">
+    <button class="dropdown-toggle" (click)="logout()">Sign Out</button>
+  </div>
+</ng-template>

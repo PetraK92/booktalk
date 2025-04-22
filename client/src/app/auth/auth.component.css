@@ -1,0 +1,122 @@
+/* Dropdown container */
+.auth-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown-knapp */
+.dropdown-toggle {
+  background-color: #889e6a;
+  color: #ecefdf;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+  background-color: #5a6268;
+}
+
+/* Själva dropdown-rutan */
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  background-color: #f8f9fa;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+}
+
+/* Switch mellan Sign In / Up */
+.mode-switch {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.mode-switch button {
+  flex: 1;
+  margin: 0 2px;
+  padding: 8px 12px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.mode-switch button.active {
+  background-color: #889e6a;
+  color: white;
+}
+
+/* Formulär */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.auth-form input:focus {
+  border-color: #889e6a;
+  outline: none;
+}
+
+.auth-form button {
+  padding: 10px;
+  background-color: #889e6a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #6e7e56;
+}
+
+/* Logga ut-knapp */
+.auth-form .logout-btn {
+  background-color: #dc3545;
+  margin-top: 1rem;
+}
+
+.auth-form .logout-btn:hover {
+  background-color: #c82333;
+}
+
+/* Alternativ-knapp (byt mellan login/signup) */
+.auth-form .toggle-button {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+  padding: 0;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.auth-form .toggle-button:hover {
+  color: #0056b3;
+}

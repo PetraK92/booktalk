@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 
@@ -10,6 +10,9 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
+// Lucide
+import { LucideAngularModule, User, Edit, Settings } from 'lucide-angular';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -17,5 +20,12 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideHttpClient(),
+    importProvidersFrom(
+      LucideAngularModule.pick({
+        User,
+        Edit,
+        Settings,
+      })
+    ),
   ],
 };

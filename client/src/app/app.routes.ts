@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
-import { AdminComponent } from './pages/admin/admin.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const routes: Routes = [
   {
@@ -13,5 +13,5 @@ export const routes: Routes = [
       { path: 'books/:id', component: BookDetailsComponent },
     ],
   },
-  { path: 'admin', component: AdminComponent },
+  { path: 'profil', component: UserProfileComponent },
 ];

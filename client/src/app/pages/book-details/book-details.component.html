@@ -1,6 +1,5 @@
 <div class="book-details-wrapper">
   <div class="book-details-container" *ngIf="bookDetails; else loading">
-    <!-- Bokbild -->
     <div class="book-image">
       <img
         [src]="bookDetails?.imageLinks?.thumbnail || 'assets/no-cover.png'"
@@ -8,7 +7,6 @@
       />
     </div>
 
-    <!-- Bokinformation -->
     <div class="book-info">
       <h2>{{ bookDetails?.title }}</h2>
 

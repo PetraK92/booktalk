@@ -3,8 +3,8 @@
   max-width: 650px;
   padding: 1rem;
   margin: 20px;
-  border: 1px solid #ccc; /* Ljusgrå ram */
-  border-radius: 12px; /* Rundade hörn på hela sektionen */
+  border: 1px solid #ccc;
+  border-radius: 12px;
   background-color: #d6ddba;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .book-card {
-  width: 100px; /* Lite mindre kort */
+  width: 100px;
   text-align: center;
   padding: 0.5rem;
 }

@@ -1,0 +1,21 @@
+<h2>Din Profil</h2>
+
+<div *ngIf="userData">
+  <label>
+    Användarnamn:
+    <input type="text" [(ngModel)]="username" />
+  </label>
+  <br />
+  <label>
+    Avatar URL:
+    <input type="text" [(ngModel)]="avatar" />
+  </label>
+  <br />
+  <img [src]="avatar" alt="avatar" width="100" height="100" *ngIf="avatar" />
+  <br />
+  <button (click)="updateProfile()">Spara ändringar</button>
+</div>
+
+<div *ngIf="!userData">
+  <p>Laddar användardata...</p>
+</div>
