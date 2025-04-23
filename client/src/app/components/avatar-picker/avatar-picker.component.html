@@ -1,0 +1,9 @@
+<div class="avatar-grid">
+  <img
+    *ngFor="let avatar of avatars"
+    [src]="avatar"
+    (click)="selectAvatar(avatar)"
+    alt="Avatar"
+    class="avatar-img"
+  />
+</div>

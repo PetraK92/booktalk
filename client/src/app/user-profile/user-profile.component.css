@@ -1,0 +1,90 @@
+/* Allmän stil för profilens bakgrund och layout */
+.profile-container {
+  background: linear-gradient(
+    135deg,
+    #ffafbd,
+    #ffc3a0
+  ); /* En fin gradientbakgrund */
+  padding: 1.5rem;
+  border-radius: 10px; /* Rundade hörn på hela container */
+  max-width: 450px; /* Minska max-bredden på profilkontainern */
+  margin: 2rem auto; /* Centrera hela layouten */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* En subtil skugga */
+  text-align: left; /* Justera innehållet till vänster */
+}
+
+/* Titel på sidan */
+h2 {
+  font-family: "Roboto", sans-serif;
+  color: #333;
+  font-size: 1.5rem; /* Minska storleken på rubriken */
+  text-align: left; /* Flytta titeln till vänster */
+}
+
+/* Stil på formuläret */
+label {
+  font-size: 1rem; /* Minska storleken på etiketter */
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
+/* Inmatningsfält */
+input[type="text"] {
+  width: 20%;
+  padding: 0.6rem; /* Minska padding */
+  margin-top: 0.5rem;
+  font-size: 0.9rem; /* Minska fontstorleken */
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* När användaren är aktiv i inputfältet */
+input[type="text"]:focus {
+  border-color: #ff6f61; /* En fin orange färg när man är aktiv i fältet */
+}
+
+/* Avatarbilden */
+img {
+  display: block;
+  border-radius: 50%;
+  width: 80px; /* Minska storleken på avatarbilden */
+  height: 80px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Knappar */
+button {
+  background-color: #ff6f61; /* En varm och inbjudande färg */
+  color: white;
+  padding: 0.8rem 1.5rem; /* Minska knapppaddingen */
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  width: 20%;
+  margin-top: 1rem;
+}
+
+/* Hover-effekt på knappen */
+button:hover {
+  background-color: #ff4e40;
+}
+
+/* Avatar-pickern */
+app-avatar-picker {
+  display: flex;
+  justify-content: flex-start; /* Justera avatarerna åt vänster */
+}
+
+/* Laddningsmeddelande */
+.loading-message {
+  text-align: left;
+  font-size: 1rem;
+  color: #888;
+  font-style: italic;
+}

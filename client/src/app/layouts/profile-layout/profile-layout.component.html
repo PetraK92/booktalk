@@ -1,0 +1,19 @@
+<div class="profile-layout">
+  <!-- Header med logotyp och länk till huvudsidan -->
+  <header class="profile-header">
+    <img src="images/booktalklogga4.png" alt="App Logo" class="logo" />
+    <a routerLink="/" class="back-to-home">← Home</a>
+  </header>
+
+  <aside class="sidebar">
+    <ul>
+      <li><a routerLink="/profil">Profile</a></li>
+      <li><a routerLink="/profil/inställningar">Settings</a></li>
+      <li><a routerLink="/profil/bokhylla">Bookshelf</a></li>
+    </ul>
+  </aside>
+
+  <main class="profile-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

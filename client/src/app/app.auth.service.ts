@@ -4,40 +4,42 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  authState,
+  onAuthStateChanged,
   User,
 } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // Observable som håller koll på användarens autentiseringstillstånd.
-  user$: Observable<User | null>;
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  user$: Observable<User | null> = this.currentUserSubject.asObservable();
 
   constructor(private auth: Auth) {
-    // authState ger oss ett observable som emitterar användardata när användaren loggar in eller ut.
-    this.user$ = authState(this.auth);
+    // Endast en gång – lyssna på authState
+    onAuthStateChanged(this.auth, (user) => {
+      this.currentUserSubject.next(user);
+    });
   }
 
-  // Registrera en ny användare
+  // Registrera ny användare
   register(email: string, password: string) {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  // Logga in en användare
+  // Logga in
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  // Logga ut användaren
+  // Logga ut
   logout() {
     return signOut(this.auth);
   }
 
-  // Hämta den aktuella användaren (kan vara användbart om du vill kontrollera inloggad användare på andra ställen)
-  getCurrentUser(): Observable<User | null> {
-    return this.user$;
+  // Hämtar aktuell användare från cache
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
   }
 }

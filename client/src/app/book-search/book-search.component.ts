@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { BookCardComponent } from '../book-card/book-card.component';
-import { filter } from 'rxjs/operators';
+import { filter, debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-book-search',
@@ -19,8 +19,10 @@ export class BookSearchComponent {
   books: any[] = [];
   searchResults: any[] = [];
   fuse: any;
+  private searchSubject = new Subject<string>();
 
   constructor(private bookService: BookService, private router: Router) {
+    // Töm sökresultat vid navigering till en bokdetaljsida
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -29,14 +31,25 @@ export class BookSearchComponent {
           this.searchTerm = '';
         }
       });
+
+    // Lyssna på ändringar i sökningen med debounce
+    this.searchSubject.pipe(debounceTime(500)).subscribe((term) => {
+      this.performSearch(term);
+    });
   }
 
-  searchBooks() {
-    if (!this.searchTerm.trim()) return;
+  onSearchChange(term: string) {
+    this.searchSubject.next(term);
+  }
 
-    this.bookService.searchBooks(this.searchTerm).subscribe((res: any) => {
+  performSearch(term: string) {
+    if (!term.trim()) {
+      this.searchResults = [];
+      return;
+    }
+
+    this.bookService.searchBooks(term).subscribe((res: any) => {
       this.books = res.items || [];
-      this.searchResults = this.books;
 
       this.fuse = new Fuse(this.books, {
         keys: ['volumeInfo.title', 'volumeInfo.authors'],
@@ -44,8 +57,12 @@ export class BookSearchComponent {
       });
 
       this.searchResults = this.fuse
-        .search(this.searchTerm)
+        .search(term)
         .map((result: { item: any }) => result.item);
     });
+  }
+
+  searchBooks() {
+    this.onSearchChange(this.searchTerm);
   }
 }
