@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-profile-layout',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterModule],
   templateUrl: './profile-layout.component.html',
   styleUrls: ['./profile-layout.component.css'],
 })

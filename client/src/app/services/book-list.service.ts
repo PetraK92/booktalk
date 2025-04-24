@@ -108,4 +108,40 @@ export class BookListService {
       })
     );
   }
+
+  // Uppdatera antalet lästa sidor för en bok
+  async updatePagesRead(book: any, pagesRead: number) {
+    if (!this.userId) {
+      console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
+      return;
+    }
+
+    try {
+      const userDocRef = doc(this.firestore, 'users', this.userId);
+
+      // Uppdatera den aktuella boken med det nya antal sidor som har lästs
+      this.lists.currentlyReading = this.lists.currentlyReading.map((b) =>
+        b.title === book.title ? { ...b, pagesRead } : b
+      );
+
+      // Uppdatera Firestore
+      await updateDoc(userDocRef, {
+        currentlyReading: this.lists.currentlyReading,
+      });
+
+      // Uppdatera lokala listor (för UI)
+      this.listsSubject.next(this.lists);
+    } catch (error) {
+      console.error('Kunde inte uppdatera Firestore:', error);
+    }
+  }
+
+  // Beräkna progressen för en bok i procent
+  calculateProgress(book: any): number {
+    if (!book.pageCount || book.pageCount === 0) return 0;
+    const progress = (book.pagesRead / book.pageCount) * 100;
+
+    // Begränsa progressen till mellan 0 och 100
+    return Math.min(Math.max(progress, 0), 100);
+  }
 }

@@ -4,6 +4,7 @@ import { PopularBooksComponent } from '../../popular-books/popular-books.compone
 import { WelcomeMessageComponent } from '../../welcome-message/welcome-message.component';
 import { RouterModule } from '@angular/router';
 import { CurrentlyReadingComponent } from '../../currently-reading/currently-reading.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -14,8 +15,9 @@ import { CurrentlyReadingComponent } from '../../currently-reading/currently-rea
     WelcomeMessageComponent,
     RouterModule,
     CurrentlyReadingComponent,
+    FormsModule,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {}

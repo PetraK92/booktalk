@@ -1,7 +1,6 @@
 <div *ngIf="currentlyReadingBooks$ | async as books" class="currently-reading">
   <div *ngIf="books.length > 0; else noBooks">
     <h2>Currently Reading</h2>
-    <!-- Rubrik högst upp -->
     <div class="book-list">
       <div *ngFor="let book of books" class="book-card">
         <img
@@ -11,6 +10,21 @@
         <div class="text">
           <h3>{{ book.title }}</h3>
           <p *ngIf="book.authors">Av: {{ book.authors.join(", ") }}</p>
+
+          <!-- Progress bar och inputfält för lästa sidor -->
+          <input
+            type="number"
+            [(ngModel)]="book.pagesRead"
+            (ngModelChange)="updatePagesRead(book, book.pagesRead)"
+            placeholder="Skriv antal sidor lästa"
+            min="0"
+          />
+
+          <div class="progress">
+            <div class="progress-bar" [style.width.%]="calculateProgress(book)">
+              {{ calculateProgress(book) | number : "1.0-0" }}%
+            </div>
+          </div>
         </div>
       </div>
     </div>

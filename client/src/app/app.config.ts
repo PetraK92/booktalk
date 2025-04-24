@@ -10,8 +10,8 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
-// Lucide
-import { LucideAngularModule, User, Edit, Settings } from 'lucide-angular';
+// Importera FormsModule här
+import { FormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,11 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideHttpClient(),
     importProvidersFrom(
-      LucideAngularModule.pick({
-        User,
-        Edit,
-        Settings,
-      })
+      FormsModule // Lägg till FormsModule här
     ),
   ],
 };

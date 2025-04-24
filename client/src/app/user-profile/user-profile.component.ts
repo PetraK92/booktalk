@@ -15,7 +15,7 @@ interface UserData {
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, AvatarPickerComponent],
+  imports: [CommonModule, FormsModule, AvatarPickerComponent, FormsModule],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css'],
 })
