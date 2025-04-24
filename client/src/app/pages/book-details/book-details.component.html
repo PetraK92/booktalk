@@ -46,11 +46,18 @@
         [innerHTML]="bookDetails?.description"
       ></div>
     </div>
+
+    <!-- Knapp för att lägga till boken i olika listor -->
+    <div class="book-actions">
+      <button (click)="addToList('currentlyReading')">Currently Reading</button>
+      <button (click)="addToList('tbr')">To be read</button>
+      <button (click)="addToList('read')">Read</button>
+    </div>
   </div>
-
-  <ng-template #loading>
-    <p>Loading book details...</p>
-  </ng-template>
-
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </div>
+
+<ng-template #loading>
+  <p>Loading book details...</p>
+</ng-template>
+
+<p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>

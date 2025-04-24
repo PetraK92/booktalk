@@ -7,14 +7,18 @@
 
 .book-details-container {
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-start; /* Justerar så att allt ligger på toppen */
+  gap: 2rem;
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
-  gap: 2rem;
   background-color: #d6ddba;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.book-image {
+  flex-shrink: 0; /* Förhindrar att bilden krymper */
 }
 
 .book-image img {
@@ -26,7 +30,7 @@
 }
 
 .book-info {
-  flex: 1;
+  flex: 1; /* Gör att bokinformationen tar upp all ledig plats */
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -60,6 +64,29 @@
   margin-top: 2rem;
 }
 
+.book-actions {
+  display: flex;
+  flex-direction: column; /* Knapparna staplas vertikalt */
+  gap: 10px; /* Avstånd mellan knapparna */
+  margin-left: 20px; /* Avstånd mellan bokinformationen och knapparna */
+  align-items: flex-start; /* Gör att knapparna är vänsterjusterade inom sin container */
+}
+
+.book-actions button {
+  padding: 10px 20px;
+  background-color: #ecefdf;
+  color: #3b3b3b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 200px; /* Knappens bredd */
+}
+
+.book-actions button:hover {
+  background-color: #889e6a;
+}
+
 @media (max-width: 768px) {
   .book-details-container {
     flex-direction: column;
@@ -73,5 +100,11 @@
 
   .book-info {
     align-items: center;
+  }
+
+  .book-actions {
+    margin-left: 0;
+    margin-top: 20px;
+    align-items: center; /* Centrera knapparna på små skärmar */
   }
 }

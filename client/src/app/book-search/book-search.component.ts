@@ -22,7 +22,6 @@ export class BookSearchComponent {
   private searchSubject = new Subject<string>();
 
   constructor(private bookService: BookService, private router: Router) {
-    // Töm sökresultat vid navigering till en bokdetaljsida
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -32,7 +31,6 @@ export class BookSearchComponent {
         }
       });
 
-    // Lyssna på ändringar i sökningen med debounce
     this.searchSubject.pipe(debounceTime(500)).subscribe((term) => {
       this.performSearch(term);
     });
