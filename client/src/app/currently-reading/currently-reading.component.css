@@ -1,0 +1,49 @@
+.currently-reading {
+  width: 100%;
+  max-width: 350px; /* Smalare än popular-books */
+  padding: 1rem;
+  margin: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: #d6ddba;
+}
+
+.currently-reading h2 {
+  text-align: center; /* Centrerar rubriken */
+  font-size: 1.5rem; /* Justera storlek på rubriken om du vill */
+  margin-bottom: 1rem; /* Lite avstånd under rubriken */
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.book-card {
+  display: flex; /* Gör så att bilden och texten hamnar i en rad */
+  align-items: center; /* Vertikal centrering */
+  gap: 15px; /* Lägg till mellanrum mellan bilden och texten */
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.book-card img {
+  width: 80px; /* Gör bilden mindre */
+  height: auto;
+}
+
+.book-card .text {
+  display: flex;
+  flex-direction: column; /* Se till att titeln och författaren är vertikalt staplade */
+}
+
+.book-card h3 {
+  font-size: 0.9rem; /* Minska storleken på boktiteln */
+  margin: 0;
+}
+
+.book-card p {
+  font-size: 0.8rem; /* Minska storleken på författarnamnet */
+  margin: 0;
+}

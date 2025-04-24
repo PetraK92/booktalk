@@ -1,0 +1,22 @@
+<div *ngIf="currentlyReadingBooks$ | async as books" class="currently-reading">
+  <div *ngIf="books.length > 0; else noBooks">
+    <h2>Currently Reading</h2>
+    <!-- Rubrik högst upp -->
+    <div class="book-list">
+      <div *ngFor="let book of books" class="book-card">
+        <img
+          [src]="book.imageLinks?.thumbnail || 'assets/no-cover.png'"
+          alt="Book cover"
+        />
+        <div class="text">
+          <h3>{{ book.title }}</h3>
+          <p *ngIf="book.authors">Av: {{ book.authors.join(", ") }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noBooks>
+    <p>Du har inga böcker i 'Currently Reading' ännu.</p>
+  </ng-template>
+</div>

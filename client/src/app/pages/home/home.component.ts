@@ -3,6 +3,7 @@ import { MainLayoutComponent } from '../../layouts/main-layout/main-layout.compo
 import { PopularBooksComponent } from '../../popular-books/popular-books.component';
 import { WelcomeMessageComponent } from '../../welcome-message/welcome-message.component';
 import { RouterModule } from '@angular/router';
+import { CurrentlyReadingComponent } from '../../currently-reading/currently-reading.component';
 
 @Component({
   standalone: true,
@@ -12,6 +13,7 @@ import { RouterModule } from '@angular/router';
     PopularBooksComponent,
     WelcomeMessageComponent,
     RouterModule,
+    CurrentlyReadingComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
