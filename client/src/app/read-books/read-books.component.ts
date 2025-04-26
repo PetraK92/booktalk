@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BookListService } from '../services/book-list.service';
-import { Observable } from 'rxjs';
+import { Observable, of, combineLatest } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BookCardComponent } from '../book-card/book-card.component';
 import { BookDetailsComponent } from '../pages/book-details/book-details.component';
+import { BookService } from '../book.service';
+import { switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-read-books',
@@ -21,12 +23,30 @@ import { BookDetailsComponent } from '../pages/book-details/book-details.compone
 export class ReadBooksComponent implements OnInit {
   readBooks$!: Observable<any[]>;
 
-  constructor(private bookListService: BookListService) {}
+  constructor(
+    private bookListService: BookListService,
+    private bookService: BookService
+  ) {}
 
   ngOnInit(): void {
-    this.readBooks$ = this.bookListService.getRead();
+    this.readBooks$ = this.bookListService.getRead().pipe(
+      switchMap((books) => {
+        if (!books || books.length === 0) return of([]);
+        const detailCalls = books.map((b) =>
+          this.bookService.getBookById(b.id).pipe(
+            map((bookDetail) => ({
+              ...bookDetail,
+              id: b.id,
+              pagesRead: b.pagesRead || 0,
+            }))
+          )
+        );
+        return combineLatest(detailCalls);
+      })
+    );
+
     this.readBooks$.subscribe((books) => {
-      console.log(books);
+      console.log('Fetched Read Books:', books);
     });
   }
 }

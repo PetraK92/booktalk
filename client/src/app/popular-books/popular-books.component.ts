@@ -19,6 +19,7 @@ export class PopularBooksComponent implements OnInit {
   ngOnInit(): void {
     this.bookService.searchPopularBooks().subscribe((res: any) => {
       this.popularBooks = res.items || [];
+      console.log(res.items || []);
     });
   }
 }

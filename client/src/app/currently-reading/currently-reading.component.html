@@ -4,12 +4,14 @@
     <div class="book-list">
       <div *ngFor="let book of books" class="book-card">
         <img
-          [src]="book.imageLinks?.thumbnail || 'assets/no-cover.png'"
+          [src]="book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'"
           alt="Book cover"
         />
         <div class="text">
-          <h3>{{ book.title }}</h3>
-          <p *ngIf="book.authors">Av: {{ book.authors.join(", ") }}</p>
+          <h3>{{ book.volumeInfo.title }}</h3>
+          <p *ngIf="book.volumeInfo.authors">
+            Av: {{ book.volumeInfo.authors.join(", ") }}
+          </p>
 
           <input
             type="number"
@@ -30,7 +32,7 @@
           </button>
 
           <button
-            (click)="removeFromCurrentlyReading(book.id)"
+            (click)="removeFromCurrentlyReading(book)"
             class="remove-button"
           >
             ❌ Remove from Currently Reading
@@ -41,6 +43,6 @@
   </div>
 
   <ng-template #noBooks>
-    <p>Du har inga böcker i 'Currently Reading' ännu.</p>
+    <p>You dont't have any books in 'Currently Reading' yet.</p>
   </ng-template>
 </div>

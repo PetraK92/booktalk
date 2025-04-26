@@ -55,7 +55,7 @@ export class BookDetailsComponent implements OnInit {
 
   addToList(list: 'currentlyReading' | 'tbr' | 'read') {
     if (this.bookDetails) {
-      this.bookListService.addToList(list, this.bookDetails);
+      this.bookListService.addToList(list, { id: this.bookId });
     }
   }
 }

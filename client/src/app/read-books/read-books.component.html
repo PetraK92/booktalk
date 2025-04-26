@@ -5,7 +5,9 @@
       <div *ngFor="let book of books" class="book-card">
         <a [routerLink]="['/books', book.id]" style="text-decoration: none">
           <img
-            [src]="book.imageLinks?.thumbnail || 'assets/no-cover.png'"
+            [src]="
+              book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'
+            "
             alt="Book cover"
           />
         </a>

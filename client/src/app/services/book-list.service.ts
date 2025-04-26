@@ -30,10 +30,12 @@ export class BookListService {
 
   private listsSubject = new BehaviorSubject<BookList>(this.lists);
   private userId: string | null = null;
+  private pagesRead: number | undefined;
 
   constructor(private firestore: Firestore, private authService: AuthService) {
     this.authService.user$.subscribe((user) => {
       this.userId = user?.uid || null;
+      this.pagesRead = 0;
       if (this.userId) {
         this.loadUserLists();
       }
@@ -77,6 +79,29 @@ export class BookListService {
     }
   }
 
+  // async addToRead(book: any) {
+  //   if (!this.userId) {
+  //     console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
+  //     return;
+  //   }
+
+  //   try {
+  //     const userDocRef = doc(this.firestore, 'users', this.userId);
+
+  //     await updateDoc(userDocRef, {
+  //       read: arrayUnion(book),
+  //       currentlyReading: arrayRemove(book),
+  //     });
+
+  //     this.lists.currentlyReading = this.lists.currentlyReading.filter(
+  //       (b) => b.id !== book.id
+  //     );
+  //     this.lists.read.push(book);
+  //     this.listsSubject.next(this.lists);
+  //   } catch (error) {
+  //     console.error('Kunde inte uppdatera Firestore:', error);
+  //   }
+  // }
   async addToRead(book: any) {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
@@ -86,22 +111,46 @@ export class BookListService {
     try {
       const userDocRef = doc(this.firestore, 'users', this.userId);
 
+      const bookData = { id: book.id, pagesRead: book.pagesRead || 0 };
+
       await updateDoc(userDocRef, {
-        read: arrayUnion(book),
-        currentlyReading: arrayRemove(book),
+        read: arrayUnion(bookData),
+        currentlyReading: arrayRemove({ id: book.id }), // Ta bort bara efter id
       });
 
+      // Lokala listor uppdateras också
       this.lists.currentlyReading = this.lists.currentlyReading.filter(
         (b) => b.id !== book.id
       );
-      this.lists.read.push(book);
+      this.lists.read.push(bookData);
       this.listsSubject.next(this.lists);
     } catch (error) {
       console.error('Kunde inte uppdatera Firestore:', error);
     }
   }
 
-  async removeFromCurrentlyReading(bookId: string) {
+  // async removeFromCurrentlyReading(bookId: string) {
+  //   if (!this.userId) {
+  //     console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
+  //     return;
+  //   }
+
+  //   try {
+  //     const userDocRef = doc(this.firestore, 'users', this.userId);
+
+  //     await updateDoc(userDocRef, {
+  //       currentlyReading: arrayRemove({ id: bookId }),
+  //     });
+
+  //     this.lists.currentlyReading = this.lists.currentlyReading.filter(
+  //       (b) => b.id !== bookId
+  //     );
+  //     this.listsSubject.next(this.lists);
+  //   } catch (error) {
+  //     console.error('Kunde inte uppdatera Firestore:', error);
+  //   }
+  // }
+  async removeFromCurrentlyReading(book: { id: string; pagesRead: number }) {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
       return;
@@ -111,11 +160,11 @@ export class BookListService {
       const userDocRef = doc(this.firestore, 'users', this.userId);
 
       await updateDoc(userDocRef, {
-        currentlyReading: arrayRemove({ id: bookId }),
+        currentlyReading: arrayRemove(book), // Skicka in hela objektet direkt
       });
 
       this.lists.currentlyReading = this.lists.currentlyReading.filter(
-        (b) => b.id !== bookId
+        (b) => b.id !== book.id
       );
       this.listsSubject.next(this.lists);
     } catch (error) {
@@ -130,6 +179,9 @@ export class BookListService {
   // Hämtar aktuell lista från Firestore direkt som Observable
   getCurrentlyReading(): Observable<any[]> {
     return this.getListObservable('currentlyReading');
+  }
+  get listsValue(): BookList {
+    return this.listsSubject.getValue();
   }
 
   getTbr(): Observable<any[]> {
@@ -152,6 +204,30 @@ export class BookListService {
     );
   }
 
+  // async updatePagesRead(book: any, pagesRead: number) {
+  //   if (!this.userId) {
+  //     console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
+  //     return;
+  //   }
+
+  //   try {
+  //     const userDocRef = doc(this.firestore, 'users', this.userId);
+
+  //     this.lists.currentlyReading = this.lists.currentlyReading.map((b) =>
+  //       b.id === book.id ? { ...b, pagesRead: pagesRead } : b
+  //     );
+  //     console.log(this.lists.currentlyReading, 'hejdå');
+
+  //     // Uppdatera Firestore
+  //     await updateDoc(userDocRef, {
+  //       currentlyReading: this.lists.currentlyReading,
+  //     });
+  //     this.pagesRead = pagesRead;
+  //     this.listsSubject.next(this.lists);
+  //   } catch (error) {
+  //     console.error('Kunde inte uppdatera Firestore:', error);
+  //   }
+  // }
   async updatePagesRead(book: any, pagesRead: number) {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
@@ -161,11 +237,12 @@ export class BookListService {
     try {
       const userDocRef = doc(this.firestore, 'users', this.userId);
 
+      // Uppdatera lokalt
       this.lists.currentlyReading = this.lists.currentlyReading.map((b) =>
-        b.title === book.title ? { ...b, pagesRead } : b
+        b.id === book.id ? { ...b, pagesRead } : b
       );
 
-      // Uppdatera Firestore
+      // Uppdatera i Firestore
       await updateDoc(userDocRef, {
         currentlyReading: this.lists.currentlyReading,
       });
@@ -176,10 +253,16 @@ export class BookListService {
     }
   }
 
-  calculateProgress(book: any): number {
-    if (!book.pageCount || book.pageCount === 0) return 0;
-    const progress = (book.pagesRead / book.pageCount) * 100;
+  // calculateProgress(book: any): number {
+  //   console.log(book, 'hej');
 
+  //   if (!book.volumeInfo.pageCount || book.volumeInfo.pageCount === 0) return 0;
+  //   const progress = (this.pagesRead ?? 0 / book.volumeInfo.pageCount) * 100;
+  //   return Math.min(Math.max(progress, 0), 100);
+  // }
+  calculateProgress(book: any): number {
+    if (!book.volumeInfo.pageCount || book.volumeInfo.pageCount === 0) return 0;
+    const progress = ((book.pagesRead ?? 0) / book.volumeInfo.pageCount) * 100;
     return Math.min(Math.max(progress, 0), 100);
   }
 

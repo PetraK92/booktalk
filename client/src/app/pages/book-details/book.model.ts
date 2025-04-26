@@ -11,4 +11,5 @@ export interface BookDetails {
   categories?: string[];
   pageCount?: number;
   subtitle?: string;
+  id?: string;
 }

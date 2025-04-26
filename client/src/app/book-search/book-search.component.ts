@@ -48,7 +48,7 @@ export class BookSearchComponent {
 
     this.bookService.searchBooks(term).subscribe((res: any) => {
       this.books = res.items || [];
-
+      console.log('här är vi', res.items);
       this.fuse = new Fuse(this.books, {
         keys: ['volumeInfo.title', 'volumeInfo.authors'],
         threshold: 0.3,
