@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { AuthService } from '../app.auth.service'; // importera din AuthService
-import { User } from 'firebase/auth'; // importera Firebase User-typ
+import { AuthService } from '../app.auth.service';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-welcome-message',
@@ -12,7 +12,5 @@ import { User } from 'firebase/auth'; // importera Firebase User-typ
 })
 export class WelcomeMessageComponent {
   authService = inject(AuthService);
-  user$ = this.authService.user$; // vi lyssnar på authState i AuthService
-
-  // Ingen extra kod behövs för att visa användarens data
+  user$ = this.authService.user$;
 }

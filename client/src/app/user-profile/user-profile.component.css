@@ -1,40 +1,58 @@
 /* Allmän stil för profilens bakgrund och layout */
 .profile-container {
-  background: linear-gradient(
-    135deg,
-    #ffafbd,
-    #ffc3a0
-  ); /* En fin gradientbakgrund */
+  background: linear-gradient(135deg, #ffafbd, #ffc3a0); /* Fin gradient */
   padding: 1.5rem;
-  border-radius: 10px; /* Rundade hörn på hela container */
-  max-width: 450px; /* Minska max-bredden på profilkontainern */
-  margin: 2rem auto; /* Centrera hela layouten */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* En subtil skugga */
-  text-align: left; /* Justera innehållet till vänster */
+  border-radius: 10px;
+  max-width: 900px; /* Bredd för hela profilvyn */
+  margin: 2rem auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Layout med två kolumner: userData till vänster, currentlyReading till höger */
+.profile-layout {
+  display: flex;
+  gap: 40px;
+  /* justify-content: center; */
+  align-items: flex-start;
+  flex-wrap: wrap; /* Responsivt på mindre skärmar */
+  margin-top: 1.5rem;
+}
+
+.user-profile-section {
+  flex: 1;
+  max-width: 350px;
+}
+
+.book-section-wrapper {
+  flex: 1;
+  max-width: 350px;
+  margin-left: 120px;
 }
 
 /* Titel på sidan */
 h2 {
   font-family: "Roboto", sans-serif;
   color: #333;
-  font-size: 1.5rem; /* Minska storleken på rubriken */
-  text-align: left; /* Flytta titeln till vänster */
+  font-size: 1.5rem;
+  text-align: left;
 }
 
 /* Stil på formuläret */
 label {
-  font-size: 1rem; /* Minska storleken på etiketter */
+  font-size: 1rem;
   font-weight: bold;
   color: #333;
   display: block;
+  margin-top: 1rem;
 }
 
 /* Inmatningsfält */
 input[type="text"] {
-  width: 20%;
-  padding: 0.6rem; /* Minska padding */
-  margin-top: 0.5rem;
-  font-size: 0.9rem; /* Minska fontstorleken */
+  width: 80%;
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
   border: 2px solid #ddd;
   border-radius: 8px;
   outline: none;
@@ -43,42 +61,45 @@ input[type="text"] {
 
 /* När användaren är aktiv i inputfältet */
 input[type="text"]:focus {
-  border-color: #ff6f61; /* En fin orange färg när man är aktiv i fältet */
+  border-color: #dfaf5d;
 }
 
 /* Avatarbilden */
 img {
   display: block;
   border-radius: 50%;
-  width: 80px; /* Minska storleken på avatarbilden */
+  width: 80px;
   height: 80px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
 }
 
 /* Knappar */
 button {
-  background-color: #ff6f61; /* En varm och inbjudande färg */
+  background-color: #dfaf5d;
   color: white;
-  padding: 0.8rem 1.5rem; /* Minska knapppaddingen */
+  padding: 0.8rem 1.5rem;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: block;
-  width: 20%;
   margin-top: 1rem;
+  width: 60%;
 }
 
 /* Hover-effekt på knappen */
 button:hover {
-  background-color: #ff4e40;
+  background-color: #c39952;
 }
 
 /* Avatar-pickern */
 app-avatar-picker {
   display: flex;
-  justify-content: flex-start; /* Justera avatarerna åt vänster */
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* Laddningsmeddelande */

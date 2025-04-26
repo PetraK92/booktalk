@@ -1,19 +1,19 @@
 .avatar-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 avatarer per rad */
-  margin-top: 1rem; /* Lite avstånd från toppen om du vill */
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 1rem;
   gap: 10px;
 }
 
 .avatar-img {
-  width: 15%; /* Tar upp hela cellens bredd */
+  width: 50px;
   height: auto;
   cursor: pointer;
-  border-radius: 50%; /* Gör avatarerna runda */
+  border-radius: 50%;
   transition: transform 0.3s ease;
   margin: 0 5px;
 }
 
 .avatar-img:hover {
-  transform: scale(1.1); /* Gör avataren lite större vid hover */
+  transform: scale(1.1);
 }

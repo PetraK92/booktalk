@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   imports: [CommonModule],
   template: `
     <div class="profile-settings" *ngIf="userData">
-      <h2>Inställningar</h2>
+      <h2>Settings</h2>
       <p>E-post: {{ userData.email }}</p>
       <!-- Lägg till formulärfält och logik för att uppdatera t.ex. användarnamn eller avatar -->
     </div>

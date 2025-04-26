@@ -2,24 +2,38 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Auth } from '@angular/fire/auth';
 import { UserService } from '../../user.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile-bookshelf',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
-    <div class="profile-bookshelf">
-      <h2>Min bokhylla</h2>
-      <p *ngIf="!books.length">Inga böcker hittade.</p>
-      <ul *ngIf="books.length">
-        <li *ngFor="let book of books">{{ book.title }}</li>
-      </ul>
+    <div class="bookshelf-container">
+      <h2>My Bookshelf</h2>
+
+      <nav class="bookshelf-nav">
+        <a routerLink="read-books" routerLinkActive="active">Read Books</a>
+        <a routerLink="tbr" routerLinkActive="active">To Be Read</a>
+      </nav>
+
+      <!-- Router outlet för att visa de respektive listorna här -->
+      <router-outlet></router-outlet>
     </div>
   `,
   styles: [
     `
-      .profile-bookshelf {
+      .bookshelf-container {
         padding: 2rem;
+      }
+      .bookshelf-nav a {
+        margin-right: 1rem;
+        font-size: 18px;
+        text-decoration: none;
+      }
+      .active {
+        font-weight: bold;
+        color: #007bff;
       }
     `,
   ],

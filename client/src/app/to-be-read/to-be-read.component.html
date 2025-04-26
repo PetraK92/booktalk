@@ -1,0 +1,16 @@
+<div *ngIf="tbrBooks$ | async as books" class="book-section">
+  <h2><a routerLink="/profil/bookshelf/tbr">To Be Read (TBR)</a></h2>
+  <div *ngIf="books.length > 0; else noBooks">
+    <div class="book-list">
+      <div *ngFor="let book of books" class="book-card">
+        <img
+          [src]="book.imageLinks?.thumbnail || 'assets/no-cover.png'"
+          alt="Book cover"
+        />
+      </div>
+    </div>
+  </div>
+  <ng-template #noBooks>
+    <p>You don't have any books in this list yet..</p>
+  </ng-template>
+</div>

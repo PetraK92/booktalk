@@ -1,0 +1,22 @@
+.bookshelf-container {
+  padding: 1rem;
+}
+
+.bookshelf-nav {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.bookshelf-nav a {
+  text-decoration: none;
+  color: #333;
+  background-color: #d6ddba;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.bookshelf-nav a.active {
+  font-weight: bold;
+  background-color: #b4c087;
+}

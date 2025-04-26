@@ -1,6 +1,6 @@
 .currently-reading {
   width: 100%;
-  max-width: 350px; /* Smalare än popular-books */
+  max-width: 350px;
   padding: 1rem;
   margin: 20px;
   border: 1px solid #ccc;
@@ -9,9 +9,9 @@
 }
 
 .currently-reading h2 {
-  text-align: center; /* Centrerar rubriken */
-  font-size: 1.5rem; /* Justera storlek på rubriken om du vill */
-  margin-bottom: 1rem; /* Lite avstånd under rubriken */
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .book-list {
@@ -21,46 +21,44 @@
 }
 
 .book-card {
-  display: flex; /* Gör så att bilden och texten hamnar i en rad */
-  align-items: flex-start; /* Justerar så att bilden och texten inte är vertikalt centrerade */
-  gap: 15px; /* Lägg till mellanrum mellan bilden och texten */
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
   width: 100%;
   padding: 0.5rem;
-  border-bottom: 1px solid #ccc; /* Lägg till en linje mellan korten */
 }
 
 .book-card img {
-  width: 80px; /* Gör bilden mindre */
+  width: 80px;
   height: auto;
-  border-radius: 8px; /* Rundade hörn på bilden */
+  border-radius: 8px;
 }
 
 .book-card .text {
   display: flex;
-  flex-direction: column; /* Se till att titeln och författaren är vertikalt staplade */
-  justify-content: center; /* Vertikal centrering av text */
-  gap: 5px; /* Lägger till lite avstånd mellan titel och författare */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
 }
 
 .book-card h3 {
-  font-size: 1rem; /* Justerar storleken på boktiteln */
+  font-size: 1rem;
   margin: 0;
   font-weight: bold;
 }
 
 .book-card p {
-  font-size: 0.8rem; /* Minska storleken på författarnamnet */
+  font-size: 0.8rem;
   margin: 0;
-  color: #555; /* Gör författarens namn lite mer diskret */
+  color: #555;
 }
 
-/* Progress bar */
 .progress-bar {
   width: 100%;
   height: 8px;
   background-color: #e0e0e0;
   border-radius: 5px;
-  margin: 10px 0; /* Lite avstånd mellan progress bar och text */
+  margin: 10px 0;
 }
 
 .progress {
@@ -69,7 +67,6 @@
   border-radius: 5px;
 }
 
-/* Input-container för att lägga till sidor som har lästs */
 .input-container {
   display: flex;
   align-items: center;
@@ -88,4 +85,36 @@ input {
 
 span {
   font-size: 0.9rem;
+}
+
+.mark-read-button {
+  margin-top: 0.5rem;
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mark-read-button:hover {
+  background-color: #3e8e41;
+}
+
+.remove-button {
+  margin-top: 0.5rem;
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #3e8e41;
 }

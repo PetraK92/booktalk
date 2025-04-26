@@ -1,13 +1,7 @@
-html,
-body {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-
 .profile-layout {
   display: flex;
-  flex-direction: column; /* För att placera headern högst upp och allt under den */
-  min-height: 100vh; /* Gör så att layouten täcker hela höjden på sidan */
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .profile-header {
@@ -17,7 +11,47 @@ body {
   background-color: #889e6a;
   padding: 1.3rem;
   width: 100%;
-  box-sizing: border-box; /* 💥 Fixar overflow + glapp */
+  box-sizing: border-box;
+}
+
+.profile-body {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  background-color: #ecefdf;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #d6ddba;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.profile-content {
+  flex: 1;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 1rem 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #3b3b3b;
+  font-size: 1.1rem;
+}
+
+.sidebar ul li a:hover {
+  color: #889e6a;
 }
 
 .profile-header .logo {
@@ -37,60 +71,18 @@ body {
   color: #d6ddba;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 250px; /* Bredden på sidebaren */
-  background-color: #d6ddba;
-  padding: 1rem;
-  height: calc(100vh - 101px); /* Full höjd minus headern */
-  box-sizing: border-box;
-  position: fixed;
-  left: 0;
-  top: 101px; /* Börjar direkt under headern */
-}
-
-/* Sidebar-länkar */
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar ul li {
-  margin: 1rem 0;
-}
-
-.sidebar ul li a {
-  text-decoration: none;
-  color: #3b3b3b;
-  font-size: 1.1rem;
-}
-
-.sidebar ul li a:hover {
-  color: #889e6a;
-}
-
-/* Profilinnehåll */
-.profile-content {
-  margin-left: 250px; /* Gör så att innehållet inte täcker sidebaren */
-  padding: 2rem;
-  width: calc(100% - 250px); /* Innehållet tar upp den återstående bredden */
-  box-sizing: border-box;
-  overflow-y: auto; /* Så att innehållet kan scrolla vid behov */
-}
-
 @media (max-width: 768px) {
-  .profile-layout {
-    flex-direction: column; /* För mindre skärmar, gör layouten vertikal */
+  .profile-body {
+    flex-direction: column;
   }
 
   .sidebar {
-    width: 100%; /* Sidebaren tar hela bredden på mindre skärmar */
-    position: relative;
-    margin-bottom: 1rem; /* Ger avstånd mellan sidebar och innehåll */
-    top: 0;
+    width: 100%;
+    margin-bottom: 1rem;
   }
 
   .profile-content {
     margin-left: 0;
+    width: 100%;
   }
 }

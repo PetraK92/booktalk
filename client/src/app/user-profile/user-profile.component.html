@@ -1,22 +1,28 @@
 <h2>My profile</h2>
 
-<div *ngIf="userData">
-  <label>
-    User name:
-    <input type="text" [(ngModel)]="username" />
-  </label>
-  <br />
-  <label>
-    Avatar URL:
-    <input type="text" [(ngModel)]="avatar" />
-  </label>
-  <br />
-  <img [src]="avatar" alt="avatar" width="100" height="100" *ngIf="avatar" />
-  <br />
-  <app-avatar-picker (avatarSelected)="avatar = $event"></app-avatar-picker>
-  <button (click)="updateProfile()">Save changes</button>
+<div class="profile-layout">
+  <div class="user-profile-section" *ngIf="userData">
+    <label>
+      User name:
+      <input type="text" [(ngModel)]="username" />
+    </label>
+    <br />
+    <label>
+      Avatar URL:
+      <input type="text" [(ngModel)]="avatar" />
+    </label>
+    <br />
+    <img [src]="avatar" alt="avatar" *ngIf="avatar" />
+    <br />
+    <app-avatar-picker (avatarSelected)="avatar = $event"></app-avatar-picker>
+    <button (click)="updateProfile()">Save changes</button>
+  </div>
+
+  <div class="book-section-wrapper">
+    <app-currently-reading></app-currently-reading>
+  </div>
 </div>
 
-<div *ngIf="!userData">
+<div *ngIf="!userData" class="loading-message">
   <p>Loading...</p>
 </div>

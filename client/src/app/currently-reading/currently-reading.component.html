@@ -11,7 +11,6 @@
           <h3>{{ book.title }}</h3>
           <p *ngIf="book.authors">Av: {{ book.authors.join(", ") }}</p>
 
-          <!-- Progress bar och inputfält för lästa sidor -->
           <input
             type="number"
             [(ngModel)]="book.pagesRead"
@@ -20,11 +19,22 @@
             min="0"
           />
 
-          <div class="progress">
-            <div class="progress-bar" [style.width.%]="calculateProgress(book)">
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="calculateProgress(book)">
               {{ calculateProgress(book) | number : "1.0-0" }}%
             </div>
           </div>
+
+          <button (click)="markAsRead(book)" class="mark-read-button">
+            ✔️ Mark as Read
+          </button>
+
+          <button
+            (click)="removeFromCurrentlyReading(book.id)"
+            class="remove-button"
+          >
+            ❌ Remove from Currently Reading
+          </button>
         </div>
       </div>
     </div>

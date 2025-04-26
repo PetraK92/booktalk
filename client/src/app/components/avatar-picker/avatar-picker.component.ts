@@ -11,7 +11,6 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class AvatarPickerComponent {
   @Output() avatarSelected = new EventEmitter<string>();
 
-  // Här är URL:erna som kommer från DiceBear API
   avatars = [
     'https://api.dicebear.com/6.x/bottts/svg?seed=avatar1',
     'https://api.dicebear.com/6.x/bottts/svg?seed=avatar2',

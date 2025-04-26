@@ -63,7 +63,6 @@ export class AuthComponent {
     this.authService.logout();
   }
 
-  // 👇 Lyssnar på alla klick på dokumentet
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const targetElement = event.target as HTMLElement;

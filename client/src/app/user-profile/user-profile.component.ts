@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Auth } from '@angular/fire/auth';
 import { UserService } from '../user.service';
 import { AvatarPickerComponent } from '../components/avatar-picker/avatar-picker.component';
+import { RouterModule } from '@angular/router';
+import { CurrentlyReadingComponent } from '../currently-reading/currently-reading.component';
 
 interface UserData {
   username: string;
@@ -15,7 +17,13 @@ interface UserData {
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, AvatarPickerComponent, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AvatarPickerComponent,
+    RouterModule,
+    CurrentlyReadingComponent,
+  ],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css'],
 })
