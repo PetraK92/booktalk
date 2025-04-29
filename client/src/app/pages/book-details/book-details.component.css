@@ -66,10 +66,9 @@
 
 .book-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Behåll knapparna vertikalt */
   gap: 10px;
   margin-left: 20px;
-  align-items: flex-start;
 }
 
 .book-actions button {
@@ -85,6 +84,17 @@
 
 .book-actions button:hover {
   background-color: #889e6a;
+}
+
+.user-rating {
+  margin-top: auto; /* Fixa så att betygskomponenten hamnar längst ner */
+  color: #3b3b3b;
+}
+
+.confirmation-message {
+  font-size: 1rem;
+  color: #889e6a;
+  margin-top: 10px;
 }
 
 @media (max-width: 768px) {

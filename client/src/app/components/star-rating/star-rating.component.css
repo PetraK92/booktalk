@@ -1,0 +1,29 @@
+.star-rating {
+  display: flex;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.star {
+  position: relative;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.star-background {
+  color: #ecefdf;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.star-foreground {
+  color: gold;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}

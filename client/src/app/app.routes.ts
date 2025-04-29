@@ -4,6 +4,7 @@ import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.
 import { HomeComponent } from './pages/home/home.component';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AuthGuard } from './auth/auth.guard'; // Importera AuthGuard
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
   {
     path: 'profil',
     component: ProfileLayoutComponent,
+    canActivate: [AuthGuard], // Skydda hela profilrutt med AuthGuard
     children: [
       { path: '', component: UserProfileComponent },
       {
@@ -32,6 +34,7 @@ export const routes: Routes = [
           import('./pages/profile-bookshelf/profile-bookshelf.component').then(
             (m) => m.ProfileBookshelfComponent
           ),
+        canActivate: [AuthGuard], // Skydda bookshelf-rutter med AuthGuard
         children: [
           {
             path: '',
@@ -55,6 +58,12 @@ export const routes: Routes = [
             children: [{ path: 'books/:id', component: BookDetailsComponent }],
           },
         ],
+      },
+      {
+        path: 'review/:id',
+        loadComponent: () =>
+          import('./review/review.component').then((m) => m.ReviewComponent),
+        canActivate: [AuthGuard], // Skydda review-sidan med AuthGuard
       },
     ],
   },

@@ -16,6 +16,7 @@ export class AuthComponent {
   password = '';
   visibleDropdown: 'signin' | 'signup' | null = null;
   user: any = null;
+  errorMessage: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -42,21 +43,23 @@ export class AuthComponent {
         if (res.user?.uid && !isLogin) {
           const userRef = doc(this.firestore, 'users', res.user.uid);
           await setDoc(userRef, {
-            username: '',
-            avatar: '',
-            currentlyreading: '',
-            savedbooks: [],
+            username: '', // Lägg till användarnamn om du vill att användare ska kunna sätta sitt eget användarnamn
+            avatar: '', // Lägg till användaravatar här om du har ett fält för det
+            email: this.email, // Lägg till e-postadress här för att lagra det i användardokumentet
+            currentlyReading: [], // En tom lista för användarens "currently reading" böcker
+            savedBooks: [], // En lista för användarens sparade böcker
           });
         }
         this.email = '';
         this.password = '';
         this.visibleDropdown = null;
       })
-      .catch((err) =>
-        alert(
-          `Fel vid ${isLogin ? 'inloggning' : 'registrering'}: ${err.message}`
-        )
-      );
+      .catch((err) => {
+        this.errorMessage = `Fel vid ${
+          isLogin ? 'inloggning' : 'registrering'
+        }: ${err.message}`;
+        console.error(this.errorMessage); // Logga felet för felsökning
+      });
   }
 
   logout() {

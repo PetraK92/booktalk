@@ -33,64 +33,6 @@ export class CurrentlyReadingComponent implements OnInit {
     this.user$ = this.authService.user$;
   }
 
-  // ngOnInit(): void {
-  //   // this.currentlyReadingBooks$ = this.bookListService.getCurrentlyReading();
-
-  //   // <-- change this:
-  //   this.currentlyReadingBooks$ = this.bookListService.getLists().subscribe(async (lists) => {
-  //     console.log('Now I really see the loaded books:', lists.currentlyReading);
-  //     const test = await this.bookService.getBookById(
-  //       lists.currentlyReading[0]
-  //     );
-  //     console.log('hej', test);
-  //     return test;
-  //   });
-  // }
-  // ngOnInit(): void {
-  //   this.currentlyReadingBooks$ = this.bookListService
-  //     .getLists()
-  //     .pipe(
-  //       map((lists) => lists.currentlyReading[0]), // pick the first ID
-  //       filter((id) => !!id), // ignore empty
-  //       switchMap((bookId) => this.bookService.getBookById(bookId))
-  //     )
-  //     .subscribe((bookDetail) => {
-  //       console.log('Book detail:', bookDetail);
-  //     });
-  // }
-  // ngOnInit(): void {
-  //   this.currentlyReadingBooks$ = this.bookListService.getLists().pipe(
-  //     // 1) pluck out the array of IDs
-  //     map((lists) => lists.currentlyReading),
-
-  //     // 2) whenever IDs change, turn them into an array of detail‐Observables
-  //     switchMap((ids) => {
-  //       if (!ids || ids.length === 0) {
-  //         // no IDs → emit an empty array and complete
-  //         return of([]);
-  //       }
-  //       // map each ID to an HTTP call
-  //       const detailCalls = ids.map((id) => this.bookService.getBookById(id));
-  //       // combineLatest will wait until every call has emitted, then produce an array
-  //       return combineLatest(detailCalls);
-  //     })
-  //   );
-  // }
-
-  // ngOnInit() {
-  //   this.currentlyReadingBooks$ = this.bookListService.getLists().pipe(
-  //     map((lists) => lists.currentlyReading),
-  //     switchMap((ids) => {
-  //       if (!ids || ids.length === 0) return of([]);
-  //       const detailCalls = ids.map((id) =>
-  //         this.bookService
-  //           .getBookById(id.id)
-  //           .pipe(tap((book) => console.log('📚 book detail for', id, book)))
-  //       );
-  //       return combineLatest(detailCalls);
-  //     })
-  //   );
-  // }
   ngOnInit() {
     this.currentlyReadingBooks$ = this.bookListService.getLists().pipe(
       map((lists) => lists.currentlyReading),
@@ -126,9 +68,11 @@ export class CurrentlyReadingComponent implements OnInit {
   }
 
   removeFromCurrentlyReading(book: { id: string; pagesRead: number }) {
-    this.bookListService.removeFromCurrentlyReading({
-      id: book.id,
-      pagesRead: book.pagesRead,
-    });
+    this.bookListService.removeBookFromCurrentlyReading(book.id);
+
+    // this.bookListService.removeBookFromCurrentlyReading({
+    //   id: book.id,
+    //   pagesRead: book.pagesRead,
+    // });
   }
 }

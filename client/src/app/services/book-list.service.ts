@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import {
   Firestore,
   doc,
@@ -30,19 +30,16 @@ export class BookListService {
 
   private listsSubject = new BehaviorSubject<BookList>(this.lists);
   private userId: string | null = null;
-  private pagesRead: number | undefined;
 
   constructor(private firestore: Firestore, private authService: AuthService) {
     this.authService.user$.subscribe((user) => {
       this.userId = user?.uid || null;
-      this.pagesRead = 0;
       if (this.userId) {
         this.loadUserLists();
       }
     });
   }
 
-  // Hämta användarens listor från Firestore och uppdatera det lokala tillståndet
   private async loadUserLists() {
     if (!this.userId) return;
 
@@ -55,133 +52,109 @@ export class BookListService {
       this.lists.tbr = data?.['tbr'] || [];
       this.lists.read = data?.['read'] || [];
       this.listsSubject.next(this.lists);
-    } else {
-      console.log('Användardokument hittades inte.');
     }
   }
 
-  async addToList(list: 'currentlyReading' | 'tbr' | 'read', book: any) {
+  addToList(list: keyof BookList, book: any): Observable<void> {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte spara i Firestore.');
-      return;
+      return of(undefined);
     }
 
     this.lists[list].push(book);
     this.listsSubject.next(this.lists);
 
-    try {
-      const userDocRef = doc(this.firestore, 'users', this.userId);
-      await updateDoc(userDocRef, {
-        [list]: arrayUnion(book),
-      });
-    } catch (error) {
-      console.error('Kunde inte uppdatera Firestore:', error);
-    }
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    return from(updateDoc(userDocRef, { [list]: arrayUnion(book) }));
   }
 
-  // async addToRead(book: any) {
-  //   if (!this.userId) {
-  //     console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-  //     return;
-  //   }
-
-  //   try {
-  //     const userDocRef = doc(this.firestore, 'users', this.userId);
-
-  //     await updateDoc(userDocRef, {
-  //       read: arrayUnion(book),
-  //       currentlyReading: arrayRemove(book),
-  //     });
-
-  //     this.lists.currentlyReading = this.lists.currentlyReading.filter(
-  //       (b) => b.id !== book.id
-  //     );
-  //     this.lists.read.push(book);
-  //     this.listsSubject.next(this.lists);
-  //   } catch (error) {
-  //     console.error('Kunde inte uppdatera Firestore:', error);
-  //   }
-  // }
-  async addToRead(book: any) {
+  addToRead(book: any): Observable<void> {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-      return;
+      return of(undefined);
     }
 
-    try {
-      const userDocRef = doc(this.firestore, 'users', this.userId);
+    const bookData = { id: book.id, pagesRead: book.pagesRead || 0 };
+    const userDocRef = doc(this.firestore, 'users', this.userId);
 
-      const bookData = { id: book.id, pagesRead: book.pagesRead || 0 };
+    this.lists.currentlyReading = this.lists.currentlyReading.filter(
+      (b) => b.id !== book.id
+    );
+    this.lists.read.push(bookData);
+    this.listsSubject.next(this.lists);
 
-      await updateDoc(userDocRef, {
+    return from(
+      updateDoc(userDocRef, {
         read: arrayUnion(bookData),
-        currentlyReading: arrayRemove({ id: book.id }), // Ta bort bara efter id
-      });
-
-      // Lokala listor uppdateras också
-      this.lists.currentlyReading = this.lists.currentlyReading.filter(
-        (b) => b.id !== book.id
-      );
-      this.lists.read.push(bookData);
-      this.listsSubject.next(this.lists);
-    } catch (error) {
-      console.error('Kunde inte uppdatera Firestore:', error);
-    }
+        currentlyReading: arrayRemove({ id: book.id }),
+      })
+    );
   }
 
-  // async removeFromCurrentlyReading(bookId: string) {
-  //   if (!this.userId) {
-  //     console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-  //     return;
-  //   }
-
-  //   try {
-  //     const userDocRef = doc(this.firestore, 'users', this.userId);
-
-  //     await updateDoc(userDocRef, {
-  //       currentlyReading: arrayRemove({ id: bookId }),
-  //     });
-
-  //     this.lists.currentlyReading = this.lists.currentlyReading.filter(
-  //       (b) => b.id !== bookId
-  //     );
-  //     this.listsSubject.next(this.lists);
-  //   } catch (error) {
-  //     console.error('Kunde inte uppdatera Firestore:', error);
-  //   }
-  // }
-  async removeFromCurrentlyReading(book: { id: string; pagesRead: number }) {
+  saveUserRating(bookId: string, rating: number): Observable<void> {
     if (!this.userId) {
-      console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-      return;
+      console.error('Ingen användare inloggad – kan inte spara betyg.');
+      return of(undefined);
     }
 
-    try {
-      const userDocRef = doc(this.firestore, 'users', this.userId);
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    return from(updateDoc(userDocRef, { [`ratings.${bookId}`]: rating }));
+  }
 
-      await updateDoc(userDocRef, {
-        currentlyReading: arrayRemove(book), // Skicka in hela objektet direkt
-      });
-
-      this.lists.currentlyReading = this.lists.currentlyReading.filter(
-        (b) => b.id !== book.id
-      );
-      this.listsSubject.next(this.lists);
-    } catch (error) {
-      console.error('Kunde inte uppdatera Firestore:', error);
+  saveUserReview(
+    bookId: string,
+    review: { rating: number; text: string }
+  ): Observable<void> {
+    if (!this.userId) {
+      console.error('Ingen användare inloggad – kan inte spara recension.');
+      return of(undefined);
     }
+    console.log(`Sparar recension för användare ${this.userId}, bok ${bookId}`);
+
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    return from(
+      updateDoc(userDocRef, {
+        [`reviews.${bookId}`]: review,
+      })
+    );
+  }
+
+  updateUserReview(
+    bookId: string,
+    review: { rating: number; text: string }
+  ): Observable<void> {
+    if (!this.userId) {
+      console.error('Ingen användare inloggad – kan inte uppdatera recension.');
+      return of(undefined);
+    }
+
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    return from(updateDoc(userDocRef, { [`reviews.${bookId}`]: review }));
+  }
+
+  getUserReview(
+    bookId: string
+  ): Observable<{ rating: number; text: string } | null> {
+    if (!this.userId) {
+      return of(null);
+    }
+
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    return docData(userDocRef).pipe(
+      map((data: any) => data?.reviews?.[bookId] ?? null)
+    );
   }
 
   getLists(): Observable<BookList> {
     return this.listsSubject.asObservable();
   }
 
-  // Hämtar aktuell lista från Firestore direkt som Observable
-  getCurrentlyReading(): Observable<any[]> {
-    return this.getListObservable('currentlyReading');
-  }
   get listsValue(): BookList {
     return this.listsSubject.getValue();
+  }
+
+  getCurrentlyReading(): Observable<any[]> {
+    return this.getListObservable('currentlyReading');
   }
 
   getTbr(): Observable<any[]> {
@@ -204,87 +177,62 @@ export class BookListService {
     );
   }
 
-  // async updatePagesRead(book: any, pagesRead: number) {
-  //   if (!this.userId) {
-  //     console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-  //     return;
-  //   }
-
-  //   try {
-  //     const userDocRef = doc(this.firestore, 'users', this.userId);
-
-  //     this.lists.currentlyReading = this.lists.currentlyReading.map((b) =>
-  //       b.id === book.id ? { ...b, pagesRead: pagesRead } : b
-  //     );
-  //     console.log(this.lists.currentlyReading, 'hejdå');
-
-  //     // Uppdatera Firestore
-  //     await updateDoc(userDocRef, {
-  //       currentlyReading: this.lists.currentlyReading,
-  //     });
-  //     this.pagesRead = pagesRead;
-  //     this.listsSubject.next(this.lists);
-  //   } catch (error) {
-  //     console.error('Kunde inte uppdatera Firestore:', error);
-  //   }
-  // }
-  async updatePagesRead(book: any, pagesRead: number) {
+  updatePagesRead(book: any, pagesRead: number): Observable<void> {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-      return;
+      return of(undefined);
     }
 
-    try {
-      const userDocRef = doc(this.firestore, 'users', this.userId);
+    const userDocRef = doc(this.firestore, 'users', this.userId);
 
-      // Uppdatera lokalt
-      this.lists.currentlyReading = this.lists.currentlyReading.map((b) =>
-        b.id === book.id ? { ...b, pagesRead } : b
-      );
+    this.lists.currentlyReading = this.lists.currentlyReading.map((b) =>
+      b.id === book.id ? { ...b, pagesRead } : b
+    );
 
-      // Uppdatera i Firestore
-      await updateDoc(userDocRef, {
+    return from(
+      updateDoc(userDocRef, {
         currentlyReading: this.lists.currentlyReading,
-      });
-
-      this.listsSubject.next(this.lists);
-    } catch (error) {
-      console.error('Kunde inte uppdatera Firestore:', error);
-    }
+      }).then(() => {
+        this.listsSubject.next(this.lists);
+      })
+    );
   }
 
-  // calculateProgress(book: any): number {
-  //   console.log(book, 'hej');
-
-  //   if (!book.volumeInfo.pageCount || book.volumeInfo.pageCount === 0) return 0;
-  //   const progress = (this.pagesRead ?? 0 / book.volumeInfo.pageCount) * 100;
-  //   return Math.min(Math.max(progress, 0), 100);
-  // }
   calculateProgress(book: any): number {
-    if (!book.volumeInfo.pageCount || book.volumeInfo.pageCount === 0) return 0;
+    if (!book.volumeInfo?.pageCount || book.volumeInfo.pageCount === 0)
+      return 0;
     const progress = ((book.pagesRead ?? 0) / book.volumeInfo.pageCount) * 100;
     return Math.min(Math.max(progress, 0), 100);
   }
 
-  async removeBookFromCurrentlyReading(bookId: string) {
+  removeBookFromCurrentlyReading(bookId: string): Observable<void> {
     if (!this.userId) {
       console.error('Ingen användare inloggad – kan inte uppdatera Firestore.');
-      return;
+      return of(undefined);
     }
 
-    try {
-      const userDocRef = doc(this.firestore, 'users', this.userId);
+    const userDocRef = doc(this.firestore, 'users', this.userId);
 
-      await updateDoc(userDocRef, {
+    this.lists.currentlyReading = this.lists.currentlyReading.filter(
+      (b) => b.id !== bookId
+    );
+    this.listsSubject.next(this.lists);
+
+    return from(
+      updateDoc(userDocRef, {
         currentlyReading: arrayRemove({ id: bookId }),
-      });
+      })
+    );
+  }
 
-      this.lists.currentlyReading = this.lists.currentlyReading.filter(
-        (b) => b.id !== bookId
-      );
-      this.listsSubject.next(this.lists);
-    } catch (error) {
-      console.error('Kunde inte uppdatera Firestore:', error);
+  getUserRating(bookId: string): Observable<number | null> {
+    if (!this.userId) {
+      return of(null);
     }
+
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    return docData(userDocRef).pipe(
+      map((data: any) => data?.ratings?.[bookId] ?? null)
+    );
   }
 }

@@ -23,7 +23,7 @@
       </p>
 
       <p *ngIf="bookDetails?.averageRating">
-        <strong>Rating:</strong> {{ bookDetails?.averageRating }} / 5
+        <strong>Average Rating:</strong> {{ bookDetails?.averageRating }} / 5
       </p>
 
       <p *ngIf="bookDetails?.categories?.length">
@@ -51,6 +51,21 @@
       <button (click)="addToList('currentlyReading')">Currently Reading</button>
       <button (click)="addToList('tbr')">To be read</button>
       <button (click)="addToList('read')">Read</button>
+
+      <!-- Bekräftelsemeddelande visas här -->
+      <div class="confirmation-message" *ngIf="confirmationMessage">
+        {{ confirmationMessage }}
+      </div>
+
+      <!-- Betygs-komponenten längst ner i kolumnen -->
+      <div class="user-rating">
+        <strong>Your Rating:</strong>
+        <app-star-rating
+          [(rating)]="userRating"
+          (ratingChange)="onRatingChange($event)"
+        ></app-star-rating>
+      </div>
+      <button [routerLink]="['/profil/review', bookId]">Write a Review</button>
     </div>
   </div>
 </div>

@@ -1,0 +1,16 @@
+<div class="star-rating" (mouseleave)="onMouseLeave()">
+  <ng-container *ngFor="let star of [0, 1, 2, 3, 4]; let i = index">
+    <div
+      class="star"
+      (mousemove)="onMouseMove($event, i)"
+      (click)="onClick(i, $event)"
+    >
+      <div class="star-background">&#9734;</div>
+      <!-- Tom stjärna -->
+      <div class="star-foreground" [style.width.%]="calculateStarWidth(i)">
+        &#9733;
+        <!-- Fylld stjärna -->
+      </div>
+    </div>
+  </ng-container>
+</div>

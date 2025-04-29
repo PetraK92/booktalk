@@ -1,0 +1,38 @@
+<div class="review-container">
+  <h2>{{ bookDetails?.title }} - Write a Review</h2>
+
+  <div *ngIf="bookDetails">
+    <!-- Visa bokbild -->
+    <div *ngIf="bookDetails.imageLinks?.thumbnail">
+      <img
+        [src]="bookDetails.imageLinks.thumbnail"
+        alt="{{ bookDetails.title }}"
+      />
+    </div>
+
+    <!-- Visa författare -->
+    <p *ngIf="bookDetails.authors">
+      Author: {{ bookDetails.authors.join(", ") }}
+    </p>
+
+    <!-- Betygsättning -->
+    <app-star-rating [(rating)]="userRating"></app-star-rating>
+
+    <!-- Recensionstext -->
+    <textarea
+      [(ngModel)]="userReview"
+      placeholder="Write your review here..."
+      rows="5"
+    ></textarea>
+
+    <!-- Spara/uppdatera recension -->
+    <button
+      (click)="saveReview()"
+      [disabled]="!userReview.trim() || userRating === 0"
+    >
+      {{ existingReview ? "Update Review" : "Save Review" }}
+    </button>
+  </div>
+
+  <div *ngIf="!bookDetails" class="loading">Loading book details...</div>
+</div>
