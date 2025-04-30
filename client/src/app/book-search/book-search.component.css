@@ -1,32 +1,81 @@
 .search-container {
+  position: relative;
   margin-bottom: 20px;
 }
 
-input {
+.search-input {
   padding: 8px;
-  width: 250px;
+  width: 300px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 316px;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 999;
+  margin-top: 5px;
+}
+
+.dropdown ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item-link:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-item-image {
+  width: 50px;
+  height: auto;
   margin-right: 10px;
 }
 
-button {
-  padding: 8px 12px;
+.dropdown-item-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.results {
-  margin-top: 30px;
-}
-
-.book-card {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
-}
-
-.book-card h3 {
+.dropdown-item-text h4 {
+  font-size: 14px;
   margin: 0;
+  font-weight: bold;
 }
 
-.book img {
-  width: 100px; /* Justera storleken på bilder */
-  height: auto;
-  margin-top: 10px;
+.dropdown-item-text p {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
 }

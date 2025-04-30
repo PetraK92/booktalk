@@ -1,15 +1,31 @@
 <!-- Sökruta -->
-<input
-  type="text"
-  [(ngModel)]="searchTerm"
-  (input)="searchBooks()"
-  placeholder="Search for books or authors"
-/>
+<div class="search-container">
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    (input)="searchBooks()"
+    placeholder="Search for books or authors"
+    class="search-input"
+  />
 
-<!-- Lista av sökresultat -->
-<div *ngIf="searchResults.length > 0" class="book-list">
-  <app-book-card
-    *ngFor="let book of searchResults"
-    [book]="book"
-  ></app-book-card>
+  <!-- Lista av sökresultat som en dropdown -->
+  <div *ngIf="searchResults.length > 0" class="dropdown">
+    <ul>
+      <li *ngFor="let book of searchResults" class="dropdown-item">
+        <a [routerLink]="['/books', book.id]" class="dropdown-item-link">
+          <img
+            [src]="
+              book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'
+            "
+            alt="Book cover"
+            class="dropdown-item-image"
+          />
+          <div class="dropdown-item-text">
+            <h4>{{ book.volumeInfo.title }}</h4>
+            <p>{{ book.volumeInfo.authors?.join(", ") }}</p>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
