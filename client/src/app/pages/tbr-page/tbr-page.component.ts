@@ -1,13 +1,34 @@
+import { Component, OnInit } from '@angular/core';
+import { BookListService } from '../../services/book-list.service';
+import { BookService } from '../../book.service';
+import { Observable, of, forkJoin, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ToBeReadComponent } from '../../to-be-read/to-be-read.component';
 
 @Component({
   selector: 'app-tbr-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, ToBeReadComponent],
-  template: `<app-to-be-read></app-to-be-read>`,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './tbr-page.component.html',
   styleUrls: ['./tbr-page.component.css'],
 })
-export class TbrPageComponent {}
+export class TbrPageComponent implements OnInit {
+  allTbrBooks$!: Observable<any[]>;
+
+  constructor(
+    private bookListService: BookListService,
+    private bookService: BookService
+  ) {}
+
+  ngOnInit(): void {
+    this.allTbrBooks$ = this.bookListService.getTbr().pipe(
+      switchMap((entries) => {
+        if (!entries || entries.length === 0) return of([]);
+        const observables = entries.map((e) =>
+          this.bookService.getBookById(e.id)
+        );
+        return forkJoin(observables);
+      })
+    );
+  }
+}

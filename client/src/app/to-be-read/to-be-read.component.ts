@@ -28,12 +28,10 @@ export class ToBeReadComponent implements OnInit {
           return of([]);
         }
 
-        const bookObservables = tbrEntries.map((entry) =>
-          this.bookService
-            .getBookById(entry.id)
-            .pipe
-            // Kombinera in läst data om du vill senare
-            ()
+        const limitedEntries = tbrEntries.slice(0, 5); // Visa endast 5 böcker
+
+        const bookObservables = limitedEntries.map((entry) =>
+          this.bookService.getBookById(entry.id)
         );
 
         return forkJoin(bookObservables);

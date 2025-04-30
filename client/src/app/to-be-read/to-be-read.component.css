@@ -10,6 +10,7 @@
 
 .book-section h2 a {
   color: #3b3b3b;
+  text-decoration: none;
 }
 
 .book-list {
@@ -28,6 +29,7 @@
 .book-card img {
   width: 100%;
   height: auto;
+  border-radius: 4px;
 }
 
 .book-card h3 {
@@ -38,5 +40,5 @@
 
 .book-card p {
   font-size: 0.875rem;
-  color: #555;
+  color: #3b3b3b;
 }

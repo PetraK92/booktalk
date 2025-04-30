@@ -1,9 +1,43 @@
 <!-- read-books-page.component.html -->
 <h1>Read Books</h1>
+<div *ngIf="readBooks$ | async as books" class="book-list">
+  <div *ngFor="let book of books" class="book-card">
+    <div class="book-card-container">
+      <!-- Länk runt bilden -->
+      <a [routerLink]="['/books', book.id]" style="text-decoration: none">
+        <img
+          [src]="book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'"
+          alt="Book cover"
+        />
+      </a>
 
-<div class="book-list">
-  <app-read-books></app-read-books>
+      <div class="book-details">
+        <!-- Länk runt titeln -->
+        <a
+          [routerLink]="['/books', book.id]"
+          style="text-decoration: none; color: inherit"
+        >
+          <h3>{{ book.volumeInfo.title }}</h3>
+        </a>
+
+        <p>
+          <strong>Author:</strong> {{ book.volumeInfo.authors?.join(", ") }}
+        </p>
+        <p>
+          <strong>Rating:</strong>
+          {{ book.volumeInfo.averageRating || "No Rating" }}
+        </p>
+        <p>
+          <strong>Review:</strong>
+          <span *ngIf="!book.reviewFull">
+            {{ book.reviewText | slice : 0 : 100 }}...
+          </span>
+          <span *ngIf="book.reviewFull">{{ book.reviewText }}</span>
+        </p>
+        <button *ngIf="!book.reviewFull" (click)="toggleReview(book)">
+          Read More
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-
-<router-outlet></router-outlet>
-<!-- för att öppna reviews etc -->

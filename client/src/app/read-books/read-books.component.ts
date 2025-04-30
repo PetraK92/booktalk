@@ -1,10 +1,10 @@
+// read-books.component.ts
 import { Component, OnInit } from '@angular/core';
 import { BookListService } from '../services/book-list.service';
 import { Observable, of, combineLatest } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BookCardComponent } from '../book-card/book-card.component';
-import { BookDetailsComponent } from '../pages/book-details/book-details.component';
 import { BookService } from '../book.service';
 import { switchMap, map } from 'rxjs/operators';
 
@@ -13,12 +13,7 @@ import { switchMap, map } from 'rxjs/operators';
   templateUrl: './read-books.component.html',
   styleUrls: ['./read-books.component.css'],
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    BookCardComponent,
-    BookDetailsComponent,
-  ],
+  imports: [CommonModule, RouterModule, BookCardComponent],
 })
 export class ReadBooksComponent implements OnInit {
   readBooks$!: Observable<any[]>;
@@ -42,11 +37,8 @@ export class ReadBooksComponent implements OnInit {
           )
         );
         return combineLatest(detailCalls);
-      })
+      }),
+      map((books) => books.slice(0, 5)) // Begränsa till de första 5 böckerna
     );
-
-    this.readBooks$.subscribe((books) => {
-      console.log('Fetched Read Books:', books);
-    });
   }
 }

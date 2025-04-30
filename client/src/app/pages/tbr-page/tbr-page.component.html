@@ -1,1 +1,33 @@
-<app-to-be-read></app-to-be-read>
+<h1>To Be Read</h1>
+<div *ngIf="allTbrBooks$ | async as books" class="book-list">
+  <div *ngFor="let book of books" class="book-card">
+    <div class="book-card-container">
+      <a [routerLink]="['/books', book.id]">
+        <img
+          [src]="
+            book.volumeInfo?.imageLinks?.thumbnail || 'assets/no-cover.png'
+          "
+          alt="Book cover"
+        />
+      </a>
+      <div class="book-details">
+        <a
+          [routerLink]="['/books', book.id]"
+          style="text-decoration: none; color: inherit"
+        >
+          <h3>{{ book.volumeInfo.title }}</h3>
+        </a>
+        <p>
+          <strong>Author:</strong> {{ book.volumeInfo.authors?.join(", ") }}
+        </p>
+        <p>
+          <strong>Rating:</strong>
+          {{ book.volumeInfo.averageRating || "No Rating" }}
+        </p>
+        <p>
+          <strong>Pages:</strong> {{ book.volumeInfo.pageCount || "Unknown" }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

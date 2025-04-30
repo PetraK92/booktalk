@@ -1,19 +1,51 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ReadBooksComponent } from '../../read-books/read-books.component';
-import { ProfileLayoutComponent } from '../../layouts/profile-layout/profile-layout.component';
+import { CommonModule } from '@angular/common'; // Importera CommonModule för att använda inbyggda pipes som 'slice'
+import { Component, OnInit } from '@angular/core';
+import { BookListService } from '../../services/book-list.service';
+import { Observable, of, combineLatest, switchMap, map } from 'rxjs';
+import { BookService } from '../../book.service';
+import { RouterModule } from '@angular/router'; // Importera RouterModule för routing
+import { ReadBooksComponent } from '../../read-books/read-books.component'; // Importera ReadBooksComponent om den används i din HTML
 
 @Component({
   selector: 'app-read-books-page',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    ReadBooksComponent,
-    ProfileLayoutComponent,
+    CommonModule, // Lägg till CommonModule för att kunna använda slice-pipen
+    RouterModule, // För routing
+    ReadBooksComponent, // Importera ReadBooksComponent för att visa den i din HTML
   ],
-  template: `<app-read-books></app-read-books>`,
-  styleUrls: ['./read-books-page.component.css'],
+  templateUrl: './read-books-page.component.html', // Template fil
+  styleUrls: ['./read-books-page.component.css'], // Stylesheet
 })
-export class ReadBooksPageComponent {}
+export class ReadBooksPageComponent implements OnInit {
+  readBooks$!: Observable<any[]>;
+
+  constructor(
+    private bookListService: BookListService,
+    private bookService: BookService
+  ) {}
+
+  ngOnInit(): void {
+    this.readBooks$ = this.bookListService.getRead().pipe(
+      switchMap((books) => {
+        if (!books || books.length === 0) return of([]);
+        const detailCalls = books.map((b) =>
+          this.bookService.getBookById(b.id).pipe(
+            map((bookDetail) => ({
+              ...bookDetail,
+              id: b.id,
+              pagesRead: b.pagesRead || 0,
+              reviewText: b.review?.text || 'No review available',
+              reviewFull: false,
+            }))
+          )
+        );
+        return combineLatest(detailCalls);
+      })
+    );
+  }
+
+  toggleReview(book: any): void {
+    book.reviewFull = !book.reviewFull; // Toggle full review visibility
+  }
+}

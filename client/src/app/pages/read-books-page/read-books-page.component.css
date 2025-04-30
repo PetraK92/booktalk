@@ -1,0 +1,33 @@
+/* read-books-page.component.css */
+.book-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.book-card-container img {
+  width: 120px;
+  height: 180px;
+  margin-right: 20px;
+}
+
+.book-details {
+  max-width: 500px;
+}
+
+.book-details h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.book-details p {
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 10px;
+}
