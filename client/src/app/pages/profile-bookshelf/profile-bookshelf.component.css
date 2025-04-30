@@ -1,22 +1,24 @@
 .bookshelf-container {
-  padding: 1rem;
-}
-
-.bookshelf-nav {
-  margin-bottom: 1rem;
-  display: flex;
-  gap: 1rem;
+  padding: 2rem;
 }
 
 .bookshelf-nav a {
+  margin-right: 1rem;
+  font-size: 18px;
   text-decoration: none;
-  color: #333;
-  background-color: #d6ddba;
   padding: 0.5rem 1rem;
   border-radius: 8px;
+  color: #333;
 }
 
-.bookshelf-nav a.active {
+.active {
   font-weight: bold;
-  background-color: #b4c087;
+}
+
+.read-books-active {
+  background-color: #d6ddba;
+}
+
+.to-be-read-active {
+  background-color: #d6ddba;
 }

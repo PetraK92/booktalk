@@ -9,8 +9,8 @@
 }
 
 h2 {
-  font-size: 2rem; /* Storlek på texten */
-  color: #333; /* Färg på texten */
+  font-size: 1.5rem; /* Storlek på texten */
+  color: #3b3b3b; /* Färg på texten */
   margin: 0; /* Ta bort eventuell margin */
   padding: 20px 0; /* Lägg till lite padding ovan och under texten */
 }

@@ -8,6 +8,10 @@
   background-color: #d6ddba;
 }
 
+.book-section h2 a {
+  color: #3b3b3b;
+}
+
 .book-list {
   display: flex;
   flex-wrap: wrap;
@@ -18,15 +22,12 @@
   width: 100px;
   text-align: center;
   padding: 0.5rem;
-  background-color: white;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .book-card img {
   width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 .book-card h3 {

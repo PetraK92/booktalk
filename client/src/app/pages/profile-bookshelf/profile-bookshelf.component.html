@@ -2,9 +2,22 @@
   <h2>My Bookshelf</h2>
 
   <nav class="bookshelf-nav">
-    <a routerLink="read-books" routerLinkActive="active">Read Books</a>
-    <a routerLink="tbr" routerLinkActive="active">To Be Read</a>
+    <a
+      routerLink="read-books"
+      [routerLinkActive]="['active']"
+      [ngClass]="{ 'read-books-active': isActive('read-books') }"
+    >
+      Read Books
+    </a>
+    <a
+      routerLink="tbr"
+      [routerLinkActive]="['active']"
+      [ngClass]="{ 'to-be-read-active': isActive('tbr') }"
+    >
+      To Be Read
+    </a>
   </nav>
 
+  <!-- Router outlet för att visa de respektive listorna här -->
   <router-outlet></router-outlet>
 </div>

@@ -10,16 +10,19 @@
         <div class="text">
           <h3>{{ book.volumeInfo.title }}</h3>
           <p *ngIf="book.volumeInfo.authors">
-            Av: {{ book.volumeInfo.authors.join(", ") }}
+            {{ book.volumeInfo.authors.join(", ") }}
           </p>
 
-          <input
-            type="number"
-            [(ngModel)]="book.pagesRead"
-            (ngModelChange)="updatePagesRead(book, book.pagesRead)"
-            placeholder="Skriv antal sidor lästa"
-            min="0"
-          />
+          <div class="input-container">
+            <input
+              type="number"
+              [(ngModel)]="book.pagesRead"
+              (ngModelChange)="updatePagesRead(book, book.pagesRead)"
+              placeholder="Pages read"
+              min="0"
+            />
+            <span>Pages read</span>
+          </div>
 
           <div class="progress-bar">
             <div class="progress" [style.width.%]="calculateProgress(book)">
@@ -28,14 +31,14 @@
           </div>
 
           <button (click)="markAsRead(book)" class="mark-read-button">
-            ✔️ Mark as Read
+            Mark as Read
           </button>
 
           <button
             (click)="removeFromCurrentlyReading(book)"
             class="remove-button"
           >
-            ❌ Remove from Currently Reading
+            Remove from Currently Reading
           </button>
         </div>
       </div>

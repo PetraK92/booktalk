@@ -27,3 +27,20 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+/* Ny layout för dropdowns och rating-text */
+.rating-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 1rem;
+}
+
+.rating-controls label {
+  margin: 0;
+}
+
+.rating-display {
+  font-size: 0.9rem;
+  color: #666;
+}

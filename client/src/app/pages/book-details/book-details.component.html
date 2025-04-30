@@ -65,7 +65,9 @@
           (ratingChange)="onRatingChange($event)"
         ></app-star-rating>
       </div>
-      <button [routerLink]="['/profil/review', bookId]">Write a Review</button>
+      <button [routerLink]="['/profil/review', bookId]">
+        {{ hasReview ? "Read/Edit Review" : "Write a Review" }}
+      </button>
     </div>
   </div>
 </div>

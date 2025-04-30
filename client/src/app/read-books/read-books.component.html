@@ -1,5 +1,9 @@
 <div *ngIf="readBooks$ | async as books" class="book-section">
-  <h2><a routerLink="/profil/bookshelf/read-books">Read Books</a></h2>
+  <h2>
+    <a routerLink="/profil/bookshelf/read-books" style="text-decoration: none"
+      >Read Books</a
+    >
+  </h2>
   <div *ngIf="books.length > 0; else noBooks">
     <div class="book-list">
       <div *ngFor="let book of books" class="book-card">

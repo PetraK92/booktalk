@@ -1,51 +1,38 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-star-rating',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './star-rating.component.html',
   styleUrls: ['./star-rating.component.css'],
 })
 export class StarRatingComponent {
-  @Input() rating = 0; // Nuvarande sparade betyg
-  @Output() ratingChange = new EventEmitter<number>(); // Event till förälder
+  @Input() rating = 0;
+  @Output() ratingChange = new EventEmitter<number>();
 
-  hoverRating = 0; // Tillfälligt betyg när man hovrar
+  decimalOptions: number[] = [0, 0.25, 0.5, 0.75];
+  wholeOptions: number[] = [0, 1, 2, 3, 4, 5];
 
-  get displayRating() {
-    return this.hoverRating || this.rating;
+  selectedWhole: number = 0;
+  selectedDecimal: number = 0;
+
+  ngOnInit() {
+    this.selectedWhole = Math.floor(this.rating);
+    this.selectedDecimal = +(this.rating % 1).toFixed(2);
   }
 
-  // Beräkna bredden för varje stjärna
-  calculateStarWidth(i: number): number {
-    return Math.min(Math.max((this.displayRating - i) * 100, 0), 100);
+  onDropdownChange() {
+    const newRating = Number(this.selectedWhole) + Number(this.selectedDecimal);
+    this.rating = newRating;
+    this.ratingChange.emit(newRating);
   }
 
-  onMouseMove(event: MouseEvent, index: number) {
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const percent = x / rect.width;
-
-    if (percent < 0.25) {
-      this.hoverRating = index + 0.25;
-    } else if (percent < 0.5) {
-      this.hoverRating = index + 0.5;
-    } else if (percent < 0.75) {
-      this.hoverRating = index + 0.75;
-    } else {
-      this.hoverRating = index + 1;
-    }
-  }
-
-  onMouseLeave() {
-    this.hoverRating = 0;
-  }
-
-  onClick(index: number, event: MouseEvent) {
-    this.onMouseMove(event, index); // Räkna ut exakt vart
-    this.rating = this.hoverRating;
-    this.ratingChange.emit(this.rating); // Skicka till förälder
+  calculateStarWidth(index: number): number {
+    const diff = this.rating - index;
+    const width = diff >= 1 ? 100 : diff > 0 ? diff * 100 : 0;
+    return width;
   }
 }
