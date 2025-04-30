@@ -24,8 +24,8 @@
           <strong>Author:</strong> {{ book.volumeInfo.authors?.join(", ") }}
         </p>
         <p>
-          <strong>Rating:</strong>
-          {{ book.volumeInfo.averageRating || "No Rating" }}
+          <strong>Your Rating:</strong>
+          {{ book.userRating !== null ? book.userRating : "Not rated" }}
         </p>
         <p>
           <strong>Review:</strong>

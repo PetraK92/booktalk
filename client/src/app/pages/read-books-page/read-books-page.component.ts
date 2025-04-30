@@ -29,17 +29,23 @@ export class ReadBooksPageComponent implements OnInit {
     this.readBooks$ = this.bookListService.getRead().pipe(
       switchMap((books) => {
         if (!books || books.length === 0) return of([]);
+
         const detailCalls = books.map((b) =>
-          this.bookService.getBookById(b.id).pipe(
-            map((bookDetail) => ({
+          combineLatest([
+            this.bookService.getBookById(b.id),
+            this.bookListService.getUserReview(b.id),
+          ]).pipe(
+            map(([bookDetail, userReview]) => ({
               ...bookDetail,
               id: b.id,
               pagesRead: b.pagesRead || 0,
-              reviewText: b.review?.text || 'No review available',
+              userRating: userReview?.rating ?? null,
+              reviewText: userReview?.text || 'No review available',
               reviewFull: false,
             }))
           )
         );
+
         return combineLatest(detailCalls);
       })
     );
