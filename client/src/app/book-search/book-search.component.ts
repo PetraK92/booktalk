@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { BookService } from '../book.service';
 import Fuse from 'fuse.js';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,8 @@ export class BookSearchComponent {
   fuse: any;
   private searchSubject = new Subject<string>();
 
+  @ViewChild('searchInput') searchInput: ElementRef | undefined;
+
   constructor(private bookService: BookService, private router: Router) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -34,6 +36,18 @@ export class BookSearchComponent {
     this.searchSubject.pipe(debounceTime(500)).subscribe((term) => {
       this.performSearch(term);
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    if (
+      this.searchInput &&
+      !this.searchInput.nativeElement.contains(event.target)
+    ) {
+      // Klickade utanför sökfältet
+      this.searchResults = []; // Töm sökresultaten
+      this.searchTerm = ''; // Töm sökfältet
+    }
   }
 
   onSearchChange(term: string) {

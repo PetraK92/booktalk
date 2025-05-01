@@ -7,16 +7,13 @@
   <nav>
     <ul>
       <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/mybooks">My Books</a></li>
-      <li><a routerLink="/community">Community</a></li>
+      <li><a routerLink="/profil/bookshelf">My Books</a></li>
     </ul>
   </nav>
   <app-book-search></app-book-search>
 
-  <!-- Auth dropdown component -->
   <app-auth></app-auth>
 
-  <!-- Profile Icon (User profile) -->
   <a [routerLink]="'/profil'">
     <i class="bi bi-person-circle"></i>
   </a>
