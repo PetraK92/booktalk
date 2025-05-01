@@ -6,7 +6,7 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../app.auth.service';
+import { AuthService } from '../../services/app.auth.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -22,9 +22,9 @@ export class AuthGuard implements CanActivate {
     return this.authService.user$.pipe(
       map((user) => {
         if (user) {
-          return true; // Om användaren är inloggad tillåts åtkomst
+          return true;
         } else {
-          this.router.navigate(['/login']); // Om användaren inte är inloggad, omdirigeras till inloggningssidan
+          this.router.navigate(['/login']);
           return false;
         }
       })

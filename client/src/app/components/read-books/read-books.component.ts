@@ -1,11 +1,10 @@
-// read-books.component.ts
 import { Component, OnInit } from '@angular/core';
-import { BookListService } from '../services/book-list.service';
+import { BookListService } from '../../services/book-list.service';
 import { Observable, of, combineLatest } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BookCardComponent } from '../book-card/book-card.component';
-import { BookService } from '../book.service';
+import { BookService } from '../../services/book.service';
 import { switchMap, map } from 'rxjs/operators';
 
 @Component({
@@ -38,7 +37,7 @@ export class ReadBooksComponent implements OnInit {
         );
         return combineLatest(detailCalls);
       }),
-      map((books) => books.slice(0, 5)) // Begränsa till de första 5 böckerna
+      map((books) => books.slice(0, 5))
     );
   }
 }

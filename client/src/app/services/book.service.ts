@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   searchBooks(searchTerm: string): Observable<any> {
-    if (!searchTerm.trim()) return of([]); // Return an empty Observable if search term is empty
+    if (!searchTerm.trim()) return of([]);
 
     const searchParts = searchTerm.split(',');
     const title = encodeURIComponent(searchParts[0].trim());

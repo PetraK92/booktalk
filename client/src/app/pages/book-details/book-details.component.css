@@ -66,7 +66,7 @@
 
 .book-actions {
   display: flex;
-  flex-direction: column; /* Behåll knapparna vertikalt */
+  flex-direction: column;
   gap: 10px;
   margin-left: 20px;
 }
@@ -87,7 +87,7 @@
 }
 
 .user-rating {
-  margin-top: auto; /* Fixa så att betygskomponenten hamnar längst ner */
+  margin-top: auto;
   color: #3b3b3b;
 }
 

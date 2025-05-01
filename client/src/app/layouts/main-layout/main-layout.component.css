@@ -13,7 +13,7 @@
 
 app-book-search {
   flex-grow: 1;
-  margin: 0 1rem; /* Justera avståndet mellan sökfältet och andra element */
+  margin: 0 1rem;
 }
 
 nav ul {
@@ -36,20 +36,18 @@ nav li a:hover {
   padding: 0.3rem;
 }
 
-/* Justera ikonen */
 .header a i {
-  font-size: 2.5rem; /* Gör ikonen större */
-  margin-left: 1rem; /* Justera avståndet från andra element, t.ex. sökfältet */
-  cursor: pointer; /* Gör ikonen klickbar */
-  transition: transform 0.3s ease; /* Lägg till en lätt animering för interaktion */
+  font-size: 2.5rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
   color: #d6ddba;
 }
 
 .header a:hover i {
-  transform: scale(1.1); /* Gör ikonen lite större när man hovrar över den */
+  transform: scale(1.1);
 }
 
-/* Footer */
 .footer {
   background-color: #889e6a;
   color: #3b3b3b;

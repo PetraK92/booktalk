@@ -1,5 +1,4 @@
 <div class="auth-dropdowns" *ngIf="!user; else loggedIn">
-  <!-- Sign In Dropdown -->
   <div class="auth-dropdown">
     <button class="dropdown-toggle" (click)="toggleDropdown('signin')">
       Sign In
@@ -25,7 +24,6 @@
     </div>
   </div>
 
-  <!-- Sign Up Dropdown -->
   <div class="auth-dropdown">
     <button class="dropdown-toggle" (click)="toggleDropdown('signup')">
       Sign Up
@@ -46,13 +44,29 @@
           placeholder="Password"
           required
         />
+        <input
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Username"
+          required
+        />
+
+        <app-avatar-picker
+          (avatarSelected)="onAvatarSelected($event)"
+        ></app-avatar-picker>
+
+        <div *ngIf="avatar" class="avatar-preview">
+          <p>Selected avatar:</p>
+          <img [src]="avatar" alt="Avatar" class="selected-avatar-img" />
+        </div>
+
         <button type="submit">Register</button>
       </form>
     </div>
   </div>
 </div>
 
-<!-- Om användaren är inloggad -->
 <ng-template #loggedIn>
   <div class="auth-dropdown">
     <button class="dropdown-toggle" (click)="logout()">Sign Out</button>

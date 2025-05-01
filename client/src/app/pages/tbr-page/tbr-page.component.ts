@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookListService } from '../../services/book-list.service';
-import { BookService } from '../../book.service';
+import { BookService } from '../../services/book.service';
 import { Observable, of, forkJoin, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

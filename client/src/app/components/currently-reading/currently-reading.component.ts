@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookListService } from '../services/book-list.service';
-import { AuthService } from '../app.auth.service';
+import { BookListService } from '../../services/book-list.service';
+import { AuthService } from '../../services/app.auth.service';
 import {
   combineLatest,
   filter,
@@ -12,7 +12,7 @@ import {
   tap,
 } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { BookService } from '../book.service';
+import { BookService } from '../../services/book.service';
 
 @Component({
   selector: 'app-currently-reading',
@@ -41,9 +41,9 @@ export class CurrentlyReadingComponent implements OnInit {
         const detailCalls = ids.map((idObj) =>
           this.bookService.getBookById(idObj.id).pipe(
             map((bookDetail) => ({
-              ...bookDetail, // all data från Google Books
-              pagesRead: idObj.pagesRead || 0, // och lägg till pagesRead från Firestore
-              id: idObj.id, // spara id också
+              ...bookDetail,
+              pagesRead: idObj.pagesRead || 0,
+              id: idObj.id,
             })),
             tap((book) => console.log('📚 book detail for', idObj, book))
           )
@@ -57,7 +57,6 @@ export class CurrentlyReadingComponent implements OnInit {
     this.bookListService.updatePagesRead(book, pagesRead);
   }
 
-  // Metod för att beräkna progressen i %
   calculateProgress(book: any): number {
     return this.bookListService.calculateProgress(book);
   }
@@ -69,10 +68,5 @@ export class CurrentlyReadingComponent implements OnInit {
 
   removeFromCurrentlyReading(book: { id: string; pagesRead: number }) {
     this.bookListService.removeBookFromCurrentlyReading(book.id);
-
-    // this.bookListService.removeBookFromCurrentlyReading({
-    //   id: book.id,
-    //   pagesRead: book.pagesRead,
-    // });
   }
 }

@@ -1,19 +1,22 @@
 import { Component, ElementRef, HostListener } from '@angular/core';
-import { AuthService } from '../app.auth.service';
+import { AuthService } from '../../services/app.auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { doc, docData, Firestore, setDoc } from '@angular/fire/firestore';
+import { AvatarPickerComponent } from '../avatar-picker/avatar-picker.component';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, AvatarPickerComponent],
 })
 export class AuthComponent {
   email = '';
   password = '';
+  username = '';
+  avatar: string = '';
   visibleDropdown: 'signin' | 'signup' | null = null;
   user: any = null;
   errorMessage: string | null = null;
@@ -33,6 +36,10 @@ export class AuthComponent {
     this.visibleDropdown = this.visibleDropdown === mode ? null : mode;
   }
 
+  onAvatarSelected(avatarUrl: string) {
+    this.avatar = avatarUrl;
+  }
+
   onSubmit(isLogin: boolean) {
     const action = isLogin
       ? this.authService.login(this.email, this.password)
@@ -43,22 +50,24 @@ export class AuthComponent {
         if (res.user?.uid && !isLogin) {
           const userRef = doc(this.firestore, 'users', res.user.uid);
           await setDoc(userRef, {
-            username: '', // Lägg till användarnamn om du vill att användare ska kunna sätta sitt eget användarnamn
-            avatar: '', // Lägg till användaravatar här om du har ett fält för det
-            email: this.email, // Lägg till e-postadress här för att lagra det i användardokumentet
-            currentlyReading: [], // En tom lista för användarens "currently reading" böcker
-            savedBooks: [], // En lista för användarens sparade böcker
+            username: this.username,
+            avatar: this.avatar,
+            email: this.email,
+            currentlyReading: [],
+            savedBooks: [],
           });
         }
         this.email = '';
         this.password = '';
+        this.username = '';
+        this.avatar = '';
         this.visibleDropdown = null;
       })
       .catch((err) => {
         this.errorMessage = `Fel vid ${
           isLogin ? 'inloggning' : 'registrering'
         }: ${err.message}`;
-        console.error(this.errorMessage); // Logga felet för felsökning
+        console.error(this.errorMessage);
       });
   }
 

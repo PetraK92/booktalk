@@ -28,7 +28,6 @@
   white-space: nowrap;
 }
 
-/* Ny layout för dropdowns och rating-text */
 .rating-controls {
   display: flex;
   align-items: center;

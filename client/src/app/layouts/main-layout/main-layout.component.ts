@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { BookSearchComponent } from '../../book-search/book-search.component';
+import { BookSearchComponent } from '../../components/book-search/book-search.component';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { AuthComponent } from '../../auth/auth.component';
+import { AuthComponent } from '../../components/auth/auth.component';
 
 @Component({
   standalone: true,
@@ -11,12 +11,11 @@ import { AuthComponent } from '../../auth/auth.component';
   styleUrls: ['./main-layout.component.css'],
 })
 export class MainLayoutComponent implements AfterViewInit {
-  @ViewChild('authComponent') authComponent!: AuthComponent; // Referens till AuthComponent
+  @ViewChild('authComponent') authComponent!: AuthComponent;
 
   constructor() {}
 
   ngAfterViewInit() {
-    // Det är här vi kan använda authComponent för att anropa metoder från AuthComponent
     console.log(this.authComponent);
   }
 }

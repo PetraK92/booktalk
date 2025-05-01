@@ -52,12 +52,10 @@
       <button (click)="addToList('tbr')">To be read</button>
       <button (click)="addToList('read')">Read</button>
 
-      <!-- Bekräftelsemeddelande visas här -->
       <div class="confirmation-message" *ngIf="confirmationMessage">
         {{ confirmationMessage }}
       </div>
 
-      <!-- Betygs-komponenten längst ner i kolumnen -->
       <div class="user-rating">
         <strong>Your Rating:</strong>
         <app-star-rating

@@ -1,21 +1,17 @@
-import { CommonModule } from '@angular/common'; // Importera CommonModule för att använda inbyggda pipes som 'slice'
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { BookListService } from '../../services/book-list.service';
 import { Observable, of, combineLatest, switchMap, map } from 'rxjs';
-import { BookService } from '../../book.service';
-import { RouterModule } from '@angular/router'; // Importera RouterModule för routing
-import { ReadBooksComponent } from '../../read-books/read-books.component'; // Importera ReadBooksComponent om den används i din HTML
+import { BookService } from '../../services/book.service';
+import { RouterModule } from '@angular/router';
+import { ReadBooksComponent } from '../../components/read-books/read-books.component';
 
 @Component({
   selector: 'app-read-books-page',
   standalone: true,
-  imports: [
-    CommonModule, // Lägg till CommonModule för att kunna använda slice-pipen
-    RouterModule, // För routing
-    ReadBooksComponent, // Importera ReadBooksComponent för att visa den i din HTML
-  ],
-  templateUrl: './read-books-page.component.html', // Template fil
-  styleUrls: ['./read-books-page.component.css'], // Stylesheet
+  imports: [CommonModule, RouterModule, ReadBooksComponent],
+  templateUrl: './read-books-page.component.html',
+  styleUrls: ['./read-books-page.component.css'],
 })
 export class ReadBooksPageComponent implements OnInit {
   readBooks$!: Observable<any[]>;
@@ -52,6 +48,6 @@ export class ReadBooksPageComponent implements OnInit {
   }
 
   toggleReview(book: any): void {
-    book.reviewFull = !book.reviewFull; // Toggle full review visibility
+    book.reviewFull = !book.reviewFull;
   }
 }

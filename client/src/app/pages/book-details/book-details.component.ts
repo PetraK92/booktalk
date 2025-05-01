@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BookService } from '../../book.service';
+import { BookService } from '../../services/book.service';
 import { BookListService } from '../../services/book-list.service';
 import { BookDetails } from './book.model';
 import { switchMap } from 'rxjs/operators';
@@ -22,7 +22,7 @@ export class BookDetailsComponent implements OnInit {
   userRating: number = 0;
   userReview: string = '';
   confirmationMessage: string | null = null;
-  hasReview: boolean = false; // Ny flagga
+  hasReview: boolean = false;
 
   constructor(
     private route: ActivatedRoute,

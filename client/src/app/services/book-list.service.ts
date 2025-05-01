@@ -9,7 +9,7 @@ import {
   getDoc,
   docData,
 } from '@angular/fire/firestore';
-import { AuthService } from '../app.auth.service';
+import { AuthService } from './app.auth.service';
 import { switchMap, map } from 'rxjs/operators';
 
 interface BookList {

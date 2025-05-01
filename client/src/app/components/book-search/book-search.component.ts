@@ -1,5 +1,5 @@
 import { Component, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { BookService } from '../book.service';
+import { BookService } from '../../services/book.service';
 import Fuse from 'fuse.js';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -44,9 +44,8 @@ export class BookSearchComponent {
       this.searchInput &&
       !this.searchInput.nativeElement.contains(event.target)
     ) {
-      // Klickade utanför sökfältet
-      this.searchResults = []; // Töm sökresultaten
-      this.searchTerm = ''; // Töm sökfältet
+      this.searchResults = [];
+      this.searchTerm = '';
     }
   }
 

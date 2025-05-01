@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '@angular/fire/auth';
-import { UserService } from '../user.service';
-import { AvatarPickerComponent } from '../components/avatar-picker/avatar-picker.component';
+import { UserService } from '../../services/user.service';
+import { AvatarPickerComponent } from '../avatar-picker/avatar-picker.component';
 import { RouterModule } from '@angular/router';
 import { CurrentlyReadingComponent } from '../currently-reading/currently-reading.component';
 

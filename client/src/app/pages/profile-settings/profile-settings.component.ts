@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../app.auth.service';
+import { AuthService } from '../../services/app.auth.service';
 import { Firestore, docData, doc } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 

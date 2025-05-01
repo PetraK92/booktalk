@@ -1,9 +1,7 @@
-<!-- read-books-page.component.html -->
 <h1>Read Books</h1>
 <div *ngIf="readBooks$ | async as books" class="book-list">
   <div *ngFor="let book of books" class="book-card">
     <div class="book-card-container">
-      <!-- Länk runt bilden -->
       <a [routerLink]="['/books', book.id]" style="text-decoration: none">
         <img
           [src]="book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'"
@@ -12,7 +10,6 @@
       </a>
 
       <div class="book-details">
-        <!-- Länk runt titeln -->
         <a
           [routerLink]="['/books', book.id]"
           style="text-decoration: none; color: inherit"

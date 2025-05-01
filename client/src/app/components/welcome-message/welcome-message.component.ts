@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { AuthService } from '../app.auth.service';
+import { AuthService } from '../../services/app.auth.service';
 import { User } from 'firebase/auth';
 
 @Component({
@@ -13,4 +13,16 @@ import { User } from 'firebase/auth';
 export class WelcomeMessageComponent {
   authService = inject(AuthService);
   user$ = this.authService.user$;
+
+  username: string = '';
+
+  constructor() {
+    this.user$.subscribe((user: User | null) => {
+      if (user) {
+        this.username = user.displayName || user.email || 'Guest';
+      } else {
+        this.username = 'Guest';
+      }
+    });
+  }
 }
