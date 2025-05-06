@@ -4,9 +4,11 @@
     <div class="book-card" *ngFor="let book of popularBooks">
       <a [routerLink]="['/books', book.id]" style="text-decoration: none">
         <img
-          [src]="book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'"
-          [alt]="book.volumeInfo.title"
           class="book-image"
+          [src]="
+            book.volumeInfo?.imageLinks?.thumbnail || 'assets/no-cover.png'
+          "
+          alt="Book cover"
         />
       </a>
     </div>

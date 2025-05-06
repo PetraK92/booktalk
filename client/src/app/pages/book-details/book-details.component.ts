@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { BookListService } from '../../services/book-list.service';
-import { BookDetails } from './book.model';
+import { BookDetails } from '../../models/book.model';
 import { switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { StarRatingComponent } from '../../components/star-rating/star-rating.component';
@@ -46,9 +46,9 @@ export class BookDetailsComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (response: any) => {
+        next: (response: BookDetails) => {
           if (response && response.volumeInfo) {
-            this.bookDetails = response.volumeInfo;
+            this.bookDetails = response;
             this.loadUserRating();
             this.loadUserReview();
           } else {
@@ -64,7 +64,7 @@ export class BookDetailsComponent implements OnInit {
 
   addToList(list: 'currentlyReading' | 'tbr' | 'read') {
     if (this.bookDetails) {
-      this.bookListService.addToList(list, { id: this.bookId });
+      this.bookListService.addToList(list, this.bookDetails);
       this.showConfirmationMessage(`Boken har lagts till i ${list}`);
     }
   }

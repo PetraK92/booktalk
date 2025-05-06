@@ -3,19 +3,19 @@ import { BookListService } from '../../services/book-list.service';
 import { Observable, of, combineLatest } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { BookCardComponent } from '../book-card/book-card.component';
 import { BookService } from '../../services/book.service';
 import { switchMap, map } from 'rxjs/operators';
+import { BookWithProgress } from '../../models/book.model';
 
 @Component({
   selector: 'app-read-books',
   templateUrl: './read-books.component.html',
   styleUrls: ['./read-books.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule, BookCardComponent],
+  imports: [CommonModule, RouterModule],
 })
 export class ReadBooksComponent implements OnInit {
-  readBooks$!: Observable<any[]>;
+  readBooks$!: Observable<BookWithProgress[]>;
 
   constructor(
     private bookListService: BookListService,
@@ -28,11 +28,14 @@ export class ReadBooksComponent implements OnInit {
         if (!books || books.length === 0) return of([]);
         const detailCalls = books.map((b) =>
           this.bookService.getBookById(b.id).pipe(
-            map((bookDetail) => ({
-              ...bookDetail,
-              id: b.id,
-              pagesRead: b.pagesRead || 0,
-            }))
+            map(
+              (bookDetail): BookWithProgress => ({
+                ...bookDetail,
+                id: b.id,
+                pagesRead: b.pagesRead || 0,
+                totalPages: bookDetail.volumeInfo.pageCount || 0,
+              })
+            )
           )
         );
         return combineLatest(detailCalls);

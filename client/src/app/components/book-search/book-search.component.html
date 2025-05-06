@@ -14,14 +14,14 @@
         <a [routerLink]="['/books', book.id]" class="dropdown-item-link">
           <img
             [src]="
-              book.volumeInfo.imageLinks?.thumbnail || 'assets/no-cover.png'
+              book?.volumeInfo?.['imageLinks']?.thumbnail || 'assets/no-cover.png'
             "
             alt="Book cover"
             class="dropdown-item-image"
           />
           <div class="dropdown-item-text">
-            <h4>{{ book.volumeInfo.title }}</h4>
-            <p>{{ book.volumeInfo.authors?.join(", ") }}</p>
+            <h4>{{ book?.volumeInfo?.title }}</h4>
+            <p>{{ book?.volumeInfo?.authors?.join(", ") }}</p>
           </div>
         </a>
       </li>

@@ -4,21 +4,21 @@ import Fuse from 'fuse.js';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { BookCardComponent } from '../book-card/book-card.component';
 import { filter, debounceTime, Subject } from 'rxjs';
+import { BookListItem } from '../../models/book.model';
 
 @Component({
   selector: 'app-book-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, BookCardComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.css'],
 })
 export class BookSearchComponent {
   searchTerm: string = '';
-  books: any[] = [];
-  searchResults: any[] = [];
-  fuse: any;
+  books: BookListItem[] = [];
+  searchResults: BookListItem[] = [];
+  fuse!: Fuse<BookListItem>;
   private searchSubject = new Subject<string>();
 
   @ViewChild('searchInput') searchInput: ElementRef | undefined;
@@ -59,17 +59,25 @@ export class BookSearchComponent {
       return;
     }
 
-    this.bookService.searchBooks(term).subscribe((res: any) => {
-      this.books = res.items || [];
-      console.log('här är vi', res.items);
+    this.bookService.searchBooks(term).subscribe((res: BookListItem[]) => {
+      console.log('Sökresultat:', res); // Loggar hela svaret från API
+
+      this.books = res;
+
+      // Logga bildlänkar, titel och författare för att se om det saknas något
+      this.books.forEach((book) => {
+        console.log('Bok data:', book);
+        console.log('Titel:', book?.volumeInfo?.title);
+        console.log('Författare:', book?.volumeInfo?.authors);
+        console.log('Bildlänk:', book?.volumeInfo?.imageLinks?.thumbnail);
+      });
+
       this.fuse = new Fuse(this.books, {
         keys: ['volumeInfo.title', 'volumeInfo.authors'],
         threshold: 0.3,
       });
 
-      this.searchResults = this.fuse
-        .search(term)
-        .map((result: { item: any }) => result.item);
+      this.searchResults = this.fuse.search(term).map((result) => result.item);
     });
   }
 

@@ -2,48 +2,55 @@
   <div class="book-details-container" *ngIf="bookDetails; else loading">
     <div class="book-image">
       <img
-        [src]="bookDetails?.imageLinks?.thumbnail || 'assets/no-cover.png'"
+        [src]="
+          bookDetails?.volumeInfo?.imageLinks?.thumbnail ||
+          'assets/no-cover.png'
+        "
         alt="Book image"
       />
     </div>
 
     <div class="book-info">
-      <h2>{{ bookDetails?.title }}</h2>
+      <h2>{{ bookDetails?.volumeInfo?.title }}</h2>
 
-      <p *ngIf="bookDetails?.authors?.length">
-        <strong>Author:</strong> {{ bookDetails?.authors?.join(", ") }}
+      <p *ngIf="bookDetails?.volumeInfo?.authors?.length">
+        <strong>Author:</strong>
+        {{ bookDetails?.volumeInfo?.authors?.join(", ") }}
       </p>
 
-      <p *ngIf="bookDetails?.publisher">
-        <strong>Publisher:</strong> {{ bookDetails?.publisher }}
+      <p *ngIf="bookDetails?.volumeInfo?.publisher">
+        <strong>Publisher:</strong> {{ bookDetails?.volumeInfo?.publisher }}
       </p>
 
-      <p *ngIf="bookDetails?.publishedDate">
-        <strong>Published:</strong> {{ bookDetails?.publishedDate }}
+      <p *ngIf="bookDetails?.volumeInfo?.publishedDate">
+        <strong>Published:</strong> {{ bookDetails?.volumeInfo?.publishedDate }}
       </p>
 
-      <p *ngIf="bookDetails?.averageRating">
-        <strong>Average Rating:</strong> {{ bookDetails?.averageRating }} / 5
+      <p *ngIf="bookDetails?.volumeInfo?.averageRating">
+        <strong>Average Rating:</strong>
+        {{ bookDetails?.volumeInfo?.averageRating }} / 5
       </p>
 
-      <p *ngIf="bookDetails?.categories?.length">
-        <strong>Genres:</strong> {{ bookDetails?.categories?.join(", ") }}
+      <p *ngIf="bookDetails?.volumeInfo?.categories?.length">
+        <strong>Genres:</strong>
+        {{ bookDetails?.volumeInfo?.categories?.join(", ") }}
       </p>
 
-      <p *ngIf="bookDetails?.pageCount">
-        <strong>Pages:</strong> {{ bookDetails?.pageCount }}
+      <p *ngIf="bookDetails?.volumeInfo?.pageCount">
+        <strong>Pages:</strong> {{ bookDetails?.volumeInfo?.pageCount }}
       </p>
 
-      <p *ngIf="bookDetails?.subtitle">
-        <strong>Series/Subtitle:</strong> {{ bookDetails?.subtitle }}
+      <p *ngIf="bookDetails?.volumeInfo?.subtitle">
+        <strong>Series/Subtitle:</strong>
+        {{ bookDetails?.volumeInfo?.subtitle }}
       </p>
 
-      <p *ngIf="bookDetails?.description">
+      <p *ngIf="bookDetails?.volumeInfo?.description">
         <strong>Description:</strong>
       </p>
       <div
-        *ngIf="bookDetails?.description"
-        [innerHTML]="bookDetails?.description"
+        *ngIf="bookDetails?.volumeInfo?.description"
+        [innerHTML]="bookDetails?.volumeInfo?.description"
       ></div>
     </div>
 

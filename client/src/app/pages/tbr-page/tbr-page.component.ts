@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookListService } from '../../services/book-list.service';
 import { BookService } from '../../services/book.service';
 import { Observable, of, forkJoin, switchMap } from 'rxjs';
+import { BookDetails } from '../../models/book.model'; // Importera BookDetails
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -13,7 +14,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./tbr-page.component.css'],
 })
 export class TbrPageComponent implements OnInit {
-  allTbrBooks$!: Observable<any[]>;
+  allTbrBooks$!: Observable<BookDetails[]>; // Rensa bort any och använd BookDetails
 
   constructor(
     private bookListService: BookListService,
@@ -27,7 +28,7 @@ export class TbrPageComponent implements OnInit {
         const observables = entries.map((e) =>
           this.bookService.getBookById(e.id)
         );
-        return forkJoin(observables);
+        return forkJoin(observables); // Hämta alla böcker samtidigt
       })
     );
   }

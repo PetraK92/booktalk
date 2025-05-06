@@ -1,1 +1,8 @@
-<p>profile-settings works!</p>
+<div class="profile-settings" *ngIf="userData; else notLoggedIn">
+  <h2>Settings</h2>
+  <p><strong>E-post:</strong> {{ userData.email }}</p>
+</div>
+
+<ng-template #notLoggedIn>
+  <p>Du måste vara inloggad för att se dina inställningar.</p>
+</ng-template>

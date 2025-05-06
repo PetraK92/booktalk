@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { doc, docData, Firestore, setDoc } from '@angular/fire/firestore';
 import { AvatarPickerComponent } from '../avatar-picker/avatar-picker.component';
+import { User as FirebaseUser } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-auth',
@@ -18,7 +19,7 @@ export class AuthComponent {
   username = '';
   avatar: string = '';
   visibleDropdown: 'signin' | 'signup' | null = null;
-  user: any = null;
+  user: FirebaseUser | null = null;
   errorMessage: string | null = null;
 
   constructor(
@@ -26,7 +27,7 @@ export class AuthComponent {
     private firestore: Firestore,
     private elementRef: ElementRef
   ) {
-    this.authService.user$.subscribe((user) => {
+    this.authService.user$.subscribe((user: FirebaseUser | null) => {
       this.user = user;
       this.visibleDropdown = null;
     });
@@ -63,7 +64,7 @@ export class AuthComponent {
         this.avatar = '';
         this.visibleDropdown = null;
       })
-      .catch((err) => {
+      .catch((err: { message: string }) => {
         this.errorMessage = `Fel vid ${
           isLogin ? 'inloggning' : 'registrering'
         }: ${err.message}`;

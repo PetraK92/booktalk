@@ -1,25 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from '../../services/book.service';
 import { CommonModule } from '@angular/common';
-import { BookCardComponent } from '../book-card/book-card.component';
 import { RouterModule } from '@angular/router';
+import { BookDetails } from '../../models/book.model';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, BookCardComponent],
+  imports: [CommonModule, RouterModule],
   selector: 'app-popular-books',
   templateUrl: './popular-books.component.html',
   styleUrls: ['./popular-books.component.css'],
 })
 export class PopularBooksComponent implements OnInit {
-  popularBooks: any[] = [];
+  popularBooks: GoogleBookItem[] = [];
 
   constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
-    this.bookService.searchPopularBooks().subscribe((res: any) => {
-      this.popularBooks = res.items || [];
-      console.log(res.items || []);
-    });
+    this.bookService
+      .searchPopularBooks() // Metoden returnerar nu en lista med GoogleBookItem
+      .subscribe((res: GoogleBookItem[]) => {
+        // Prenumerera direkt på listan
+        this.popularBooks = res || []; // Sätt populära böcker till resultatet
+        console.log(this.popularBooks);
+      });
   }
+}
+export interface GoogleBooksApiResponse {
+  items: GoogleBookItem[];
+}
+
+export interface GoogleBookItem {
+  id: string;
+  volumeInfo: BookDetails['volumeInfo'];
 }

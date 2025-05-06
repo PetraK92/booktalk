@@ -6,12 +6,13 @@ import { UserService } from '../../services/user.service';
 import { AvatarPickerComponent } from '../avatar-picker/avatar-picker.component';
 import { RouterModule } from '@angular/router';
 import { CurrentlyReadingComponent } from '../currently-reading/currently-reading.component';
+import { BookWithProgress } from '../../models/book.model';
 
 interface UserData {
   username: string;
   avatar: string;
   currentlyreading?: string;
-  savedbooks?: any[];
+  savedbooks?: BookWithProgress[];
 }
 
 @Component({

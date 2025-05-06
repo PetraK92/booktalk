@@ -1,16 +1,19 @@
 <div class="review-container">
-  <h2>{{ bookDetails?.title }} - Write a Review</h2>
+  <h2>{{ bookDetails?.volumeInfo?.title }} - Write a Review</h2>
 
   <div *ngIf="bookDetails">
-    <div *ngIf="bookDetails.imageLinks?.thumbnail">
+    <div *ngIf="bookDetails.volumeInfo?.imageLinks?.thumbnail">
       <img
-        [src]="bookDetails.imageLinks.thumbnail"
-        alt="{{ bookDetails.title }}"
+        [src]="
+          bookDetails?.volumeInfo?.imageLinks?.thumbnail ||
+          'assets/no-cover.png'
+        "
+        alt="{{ bookDetails?.volumeInfo?.title }}"
       />
     </div>
 
-    <p *ngIf="bookDetails.authors">
-      Author: {{ bookDetails.authors.join(", ") }}
+    <p *ngIf="bookDetails?.volumeInfo?.authors">
+      Author: {{ bookDetails?.volumeInfo?.authors?.join(", ") }}
     </p>
 
     <app-star-rating [(rating)]="userRating"></app-star-rating>

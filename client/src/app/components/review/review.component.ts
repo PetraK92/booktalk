@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+
 import { BookService } from '../../services/book.service';
 import { BookListService } from '../../services/book-list.service';
+import { Review, ReadBookDetails } from '../../models/book.model';
+
 import { StarRatingComponent } from '../star-rating/star-rating.component';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Review } from '../review/review.model';
-import { BookDetails } from '../../pages/book-details/book.model';
 
 @Component({
-  standalone: true,
-  imports: [StarRatingComponent, FormsModule, CommonModule],
   selector: 'app-review',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule, StarRatingComponent],
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.css'],
 })
@@ -19,7 +20,7 @@ export class ReviewComponent implements OnInit {
   bookId: string = '';
   userRating: number = 0;
   userReview: string = '';
-  bookDetails: BookDetails | null = null;
+  bookDetails: ReadBookDetails | null = null;
   existingReview: Review | null = null;
 
   constructor(
@@ -43,9 +44,9 @@ export class ReviewComponent implements OnInit {
   private loadBookDetails() {
     this.bookService
       .getBookById(this.bookId)
-      .subscribe((response: { volumeInfo: BookDetails } | null) => {
-        if (response && response.volumeInfo) {
-          this.bookDetails = response.volumeInfo;
+      .subscribe((response: ReadBookDetails | null) => {
+        if (response) {
+          this.bookDetails = response;
         }
       });
   }
