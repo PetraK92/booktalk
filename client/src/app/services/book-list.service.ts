@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, from, Observable, of, throwError, timer } from 'rxjs';
 import {
   Firestore,
   doc,
@@ -11,15 +11,7 @@ import {
   DocumentData,
 } from '@angular/fire/firestore';
 import { AuthService } from './app.auth.service';
-import {
-  switchMap,
-  map,
-  catchError,
-  retryWhen,
-  delay,
-  mergeMap,
-  take,
-} from 'rxjs/operators';
+import { switchMap, map, catchError, retry } from 'rxjs/operators';
 import {
   BookDetails,
   BookWithProgress,
@@ -69,20 +61,10 @@ export class BookListService {
   }
 
   private retryRequest<T>(maxRetries: number, delayMs: number) {
-    return (source: Observable<T>) =>
-      source.pipe(
-        retryWhen((errors) =>
-          errors.pipe(
-            mergeMap((error, count) => {
-              if (count >= maxRetries) {
-                return throwError(error);
-              }
-              return of(error).pipe(delay(delayMs));
-            }),
-            take(maxRetries)
-          )
-        )
-      );
+    return retry<T>({
+      count: maxRetries,
+      delay: (_error, retryCount) => timer(retryCount * delayMs),
+    });
   }
 
   public async loadUserLists() {
@@ -104,13 +86,25 @@ export class BookListService {
 
   addToList(list: keyof BookList, book: BookDetails): Observable<void> {
     if (!this.userId) return of(undefined);
-    this.lists[list].push(book as any);
+
+    const simplifiedBook = {
+      id: book.id,
+      title: book.volumeInfo?.title || '',
+      authors: book.volumeInfo?.authors || [],
+      totalPages: book.volumeInfo?.pageCount || 0,
+      imageLink: book.volumeInfo?.imageLinks?.thumbnail || '',
+    };
+
+    this.lists[list].push(simplifiedBook as any);
     this.listsSubject.next(this.lists);
+
     const userDocRef = doc(this.firestore, 'users', this.userId);
-    return from(updateDoc(userDocRef, { [list]: arrayUnion(book) })).pipe(
+    return from(
+      updateDoc(userDocRef, { [list]: arrayUnion(simplifiedBook) })
+    ).pipe(
       catchError((error) => {
         console.error(`Error adding book to ${list}:`, error);
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
@@ -119,7 +113,6 @@ export class BookListService {
     if (!this.userId) return of(undefined);
 
     const userDocRef = doc(this.firestore, 'users', this.userId);
-
     const exactMatch = this.lists.currentlyReading.find(
       (b) => b.id === book.id
     );
@@ -135,7 +128,6 @@ export class BookListService {
       reviewFull: false,
     };
 
-    // Lokalt uppdatera listan
     this.lists.currentlyReading = this.lists.currentlyReading.filter(
       (b) => b.id !== book.id
     );
@@ -147,15 +139,11 @@ export class BookListService {
         read: arrayUnion(bookData),
         currentlyReading: arrayRemove(exactMatch),
       })
-        .then(() => {
-          console.log(
-            '📚 Successfully moved book to "read" and updated Firestore!'
-          );
-          this.listsSubject.next(this.lists);
-        })
-        .catch((error) => {
-          console.error('Error moving book to "read":', error);
-        })
+    ).pipe(
+      catchError((error) => {
+        console.error('Error moving book to "read":', error);
+        return throwError(() => error);
+      })
     );
   }
 
@@ -165,7 +153,7 @@ export class BookListService {
     return from(updateDoc(userDocRef, { [`ratings.${bookId}`]: rating })).pipe(
       catchError((error) => {
         console.error('Error saving user rating:', error);
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
@@ -176,7 +164,7 @@ export class BookListService {
     return from(updateDoc(userDocRef, { [`reviews.${bookId}`]: review })).pipe(
       catchError((error) => {
         console.error('Error saving user review:', error);
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
@@ -187,20 +175,12 @@ export class BookListService {
 
   getUserReview(bookId: string): Observable<Review | null> {
     if (!this.userId) return of(null);
-
     const userDocRef = doc(this.firestore, 'users', this.userId);
-
-    return this.authService.user$.pipe(
-      switchMap((user) => {
-        if (!user) return of(null);
-
-        return docData(userDocRef).pipe(
-          map((data) => (data as UserData)?.reviews?.[bookId] ?? null),
-          catchError((error) => {
-            console.error('Error fetching user review:', error);
-            return of(null);
-          })
-        );
+    return docData(userDocRef).pipe(
+      map((data) => (data as UserData)?.reviews?.[bookId] ?? null),
+      catchError((error) => {
+        console.error('Error fetching user review:', error);
+        return of(null);
       })
     );
   }
@@ -236,11 +216,7 @@ export class BookListService {
           ...entry,
           totalPages: entry.volumeInfo?.pageCount ?? 0,
         }))
-      ),
-      catchError((error) => {
-        console.error('Error fetching TBR list:', error);
-        return of([]);
-      })
+      )
     );
   }
 
@@ -304,10 +280,37 @@ export class BookListService {
       updateDoc(userDocRef, {
         currentlyReading: arrayRemove(bookToRemove),
       })
-    ).pipe(
-      catchError((error) => {
-        console.error('Error removing book from "currentlyReading":', error);
-        return throwError(error);
+    );
+  }
+
+  removeBookFromRead(bookId: string): Observable<void> {
+    if (!this.userId) return of(undefined);
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    const bookToRemove = this.lists.read.find((b) => b.id === bookId);
+    if (!bookToRemove) return of(undefined);
+
+    this.lists.read = this.lists.read.filter((b) => b.id !== bookId);
+    this.listsSubject.next(this.lists);
+
+    return from(
+      updateDoc(userDocRef, {
+        read: arrayRemove(bookToRemove),
+      })
+    );
+  }
+
+  removeBookFromTbr(bookId: string): Observable<void> {
+    if (!this.userId) return of(undefined);
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+    const bookToRemove = this.lists.tbr.find((b) => b.id === bookId);
+    if (!bookToRemove) return of(undefined);
+
+    this.lists.tbr = this.lists.tbr.filter((b) => b.id !== bookId);
+    this.listsSubject.next(this.lists);
+
+    return from(
+      updateDoc(userDocRef, {
+        tbr: arrayRemove(bookToRemove),
       })
     );
   }

@@ -5,6 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AuthGuard } from './components/auth/auth.guard';
+import { AuthComponent } from './components/auth/auth.component';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,10 @@ export const routes: Routes = [
       { path: '', component: HomeComponent },
       { path: 'books/:id', component: BookDetailsComponent },
     ],
+  },
+  {
+    path: 'login',
+    component: AuthComponent,
   },
   {
     path: 'profil',
