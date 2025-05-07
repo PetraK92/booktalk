@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of, throwError } from 'rxjs';
 import {
   Firestore,
   doc,
@@ -11,7 +11,15 @@ import {
   DocumentData,
 } from '@angular/fire/firestore';
 import { AuthService } from './app.auth.service';
-import { switchMap, map } from 'rxjs/operators';
+import {
+  switchMap,
+  map,
+  catchError,
+  retryWhen,
+  delay,
+  mergeMap,
+  take,
+} from 'rxjs/operators';
 import {
   BookDetails,
   BookWithProgress,
@@ -55,16 +63,42 @@ export class BookListService {
     });
   }
 
-  private async loadUserLists() {
+  reloadUserLists(): Observable<void> {
+    if (!this.userId) return of(undefined);
+    return from(this.loadUserLists());
+  }
+
+  private retryRequest<T>(maxRetries: number, delayMs: number) {
+    return (source: Observable<T>) =>
+      source.pipe(
+        retryWhen((errors) =>
+          errors.pipe(
+            mergeMap((error, count) => {
+              if (count >= maxRetries) {
+                return throwError(error);
+              }
+              return of(error).pipe(delay(delayMs));
+            }),
+            take(maxRetries)
+          )
+        )
+      );
+  }
+
+  public async loadUserLists() {
     if (!this.userId) return;
     const userDocRef = doc(this.firestore, 'users', this.userId);
-    const docSnapshot = await getDoc(userDocRef);
-    if (docSnapshot.exists()) {
-      const data = docSnapshot.data() as UserData;
-      this.lists.currentlyReading = data.currentlyReading ?? [];
-      this.lists.tbr = data.tbr ?? [];
-      this.lists.read = data.read ?? [];
-      this.listsSubject.next(this.lists);
+    try {
+      const docSnapshot = await getDoc(userDocRef);
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data() as UserData;
+        this.lists.currentlyReading = data.currentlyReading ?? [];
+        this.lists.tbr = data.tbr ?? [];
+        this.lists.read = data.read ?? [];
+        this.listsSubject.next(this.lists);
+      }
+    } catch (error) {
+      console.error('Error loading user lists:', error);
     }
   }
 
@@ -73,19 +107,35 @@ export class BookListService {
     this.lists[list].push(book as any);
     this.listsSubject.next(this.lists);
     const userDocRef = doc(this.firestore, 'users', this.userId);
-    return from(updateDoc(userDocRef, { [list]: arrayUnion(book) }));
+    return from(updateDoc(userDocRef, { [list]: arrayUnion(book) })).pipe(
+      catchError((error) => {
+        console.error(`Error adding book to ${list}:`, error);
+        return throwError(error);
+      })
+    );
   }
 
   addToRead(book: BookWithProgress): Observable<void> {
     if (!this.userId) return of(undefined);
+
+    const userDocRef = doc(this.firestore, 'users', this.userId);
+
+    const exactMatch = this.lists.currentlyReading.find(
+      (b) => b.id === book.id
+    );
+    if (!exactMatch) {
+      console.warn('Book not found in currentlyReading.');
+      return of(undefined);
+    }
+
     const bookData: ReadBookDetails = {
       ...book,
       userRating: null,
       reviewText: '',
       reviewFull: false,
     };
-    const userDocRef = doc(this.firestore, 'users', this.userId);
 
+    // Lokalt uppdatera listan
     this.lists.currentlyReading = this.lists.currentlyReading.filter(
       (b) => b.id !== book.id
     );
@@ -95,21 +145,40 @@ export class BookListService {
     return from(
       updateDoc(userDocRef, {
         read: arrayUnion(bookData),
-        currentlyReading: arrayRemove(book),
+        currentlyReading: arrayRemove(exactMatch),
       })
+        .then(() => {
+          console.log(
+            '📚 Successfully moved book to "read" and updated Firestore!'
+          );
+          this.listsSubject.next(this.lists);
+        })
+        .catch((error) => {
+          console.error('Error moving book to "read":', error);
+        })
     );
   }
 
   saveUserRating(bookId: string, rating: number): Observable<void> {
     if (!this.userId) return of(undefined);
     const userDocRef = doc(this.firestore, 'users', this.userId);
-    return from(updateDoc(userDocRef, { [`ratings.${bookId}`]: rating }));
+    return from(updateDoc(userDocRef, { [`ratings.${bookId}`]: rating })).pipe(
+      catchError((error) => {
+        console.error('Error saving user rating:', error);
+        return throwError(error);
+      })
+    );
   }
 
   saveUserReview(bookId: string, review: Review): Observable<void> {
     if (!this.userId) return of(undefined);
     const userDocRef = doc(this.firestore, 'users', this.userId);
-    return from(updateDoc(userDocRef, { [`reviews.${bookId}`]: review }));
+    return from(updateDoc(userDocRef, { [`reviews.${bookId}`]: review })).pipe(
+      catchError((error) => {
+        console.error('Error saving user review:', error);
+        return throwError(error);
+      })
+    );
   }
 
   updateUserReview(bookId: string, review: Review): Observable<void> {
@@ -118,9 +187,21 @@ export class BookListService {
 
   getUserReview(bookId: string): Observable<Review | null> {
     if (!this.userId) return of(null);
+
     const userDocRef = doc(this.firestore, 'users', this.userId);
-    return docData(userDocRef).pipe(
-      map((data) => (data as UserData)?.reviews?.[bookId] ?? null)
+
+    return this.authService.user$.pipe(
+      switchMap((user) => {
+        if (!user) return of(null);
+
+        return docData(userDocRef).pipe(
+          map((data) => (data as UserData)?.reviews?.[bookId] ?? null),
+          catchError((error) => {
+            console.error('Error fetching user review:', error);
+            return of(null);
+          })
+        );
+      })
     );
   }
 
@@ -128,7 +209,11 @@ export class BookListService {
     if (!this.userId) return of(null);
     const userDocRef = doc(this.firestore, 'users', this.userId);
     return docData(userDocRef).pipe(
-      map((data) => (data as UserData)?.ratings?.[bookId] ?? null)
+      map((data) => (data as UserData)?.ratings?.[bookId] ?? null),
+      catchError((error) => {
+        console.error('Error fetching user rating:', error);
+        return of(null);
+      })
     );
   }
 
@@ -151,7 +236,11 @@ export class BookListService {
           ...entry,
           totalPages: entry.volumeInfo?.pageCount ?? 0,
         }))
-      )
+      ),
+      catchError((error) => {
+        console.error('Error fetching TBR list:', error);
+        return of([]);
+      })
     );
   }
 
@@ -167,7 +256,11 @@ export class BookListService {
         if (!user) return of([] as BookList[K]);
         const userDocRef = doc(this.firestore, 'users', user.uid);
         return docData(userDocRef).pipe(
-          map((data) => ((data as UserData)?.[listName] ?? []) as BookList[K])
+          map((data) => ((data as UserData)?.[listName] ?? []) as BookList[K]),
+          catchError((error) => {
+            console.error(`Error fetching ${listName} list:`, error);
+            return of([] as BookList[K]);
+          })
         );
       })
     );
@@ -210,6 +303,11 @@ export class BookListService {
     return from(
       updateDoc(userDocRef, {
         currentlyReading: arrayRemove(bookToRemove),
+      })
+    ).pipe(
+      catchError((error) => {
+        console.error('Error removing book from "currentlyReading":', error);
+        return throwError(error);
       })
     );
   }

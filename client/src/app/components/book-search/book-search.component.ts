@@ -60,11 +60,10 @@ export class BookSearchComponent {
     }
 
     this.bookService.searchBooks(term).subscribe((res: BookListItem[]) => {
-      console.log('Sökresultat:', res); // Loggar hela svaret från API
+      console.log('Sökresultat:', res);
 
       this.books = res;
 
-      // Logga bildlänkar, titel och författare för att se om det saknas något
       this.books.forEach((book) => {
         console.log('Bok data:', book);
         console.log('Titel:', book?.volumeInfo?.title);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BookListService } from '../../services/book-list.service';
 import { Observable, switchMap, of, forkJoin, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { BookDetails } from '../../models/book.model';
   styleUrls: ['./to-be-read.component.css'],
   standalone: true,
   imports: [CommonModule, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToBeReadComponent implements OnInit {
   tbrBooks$!: Observable<BookDetails[]>;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BookListService } from '../../services/book-list.service';
 import { Observable, of, combineLatest } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -13,6 +13,7 @@ import { BookWithProgress } from '../../models/book.model';
   styleUrls: ['./read-books.component.css'],
   standalone: true,
   imports: [CommonModule, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReadBooksComponent implements OnInit {
   readBooks$!: Observable<BookWithProgress[]>;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookListService } from '../../services/book-list.service';
 import { Observable, of, combineLatest, switchMap, map } from 'rxjs';
 import { BookService } from '../../services/book.service';
-import { ReadBookDetails } from '../../models/book.model'; // Importera rätt modell
+import { ReadBookDetails } from '../../models/book.model';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./read-books-page.component.css'],
 })
 export class ReadBooksPageComponent implements OnInit {
-  readBooks$!: Observable<ReadBookDetails[]>; // Använd ReadBookDetails som typ
+  readBooks$!: Observable<ReadBookDetails[]>;
 
   constructor(
     private bookListService: BookListService,
@@ -24,7 +24,7 @@ export class ReadBooksPageComponent implements OnInit {
   ngOnInit(): void {
     this.readBooks$ = this.bookListService.getRead().pipe(
       switchMap((books) => {
-        if (!books || books.length === 0) return of([]); // Return empty array if no books
+        if (!books || books.length === 0) return of([]);
 
         const detailCalls = books.map((b) =>
           combineLatest([
@@ -33,9 +33,9 @@ export class ReadBooksPageComponent implements OnInit {
           ]).pipe(
             map(([bookDetail, userReview]) => ({
               ...bookDetail,
-              id: b.id, // Bibehåll id
+              id: b.id,
               pagesRead: b.pagesRead || 0,
-              totalPages: b.totalPages || 0, // Total pages kan komma från din API eller lokal lagring
+              totalPages: b.totalPages || 0,
               userRating: userReview?.rating ?? null,
               reviewText: userReview?.text || 'No review available',
               reviewFull: false,

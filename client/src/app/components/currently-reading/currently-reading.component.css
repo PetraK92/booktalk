@@ -93,6 +93,7 @@ span {
 }
 
 .mark-read-button {
+  width: 180px;
   margin-top: 0.5rem;
   padding: 6px 12px;
   background-color: #ecefdf;
@@ -122,4 +123,78 @@ span {
 
 .remove-button:hover {
   background-color: #889e6a;
+}
+
+.book-section {
+  width: 100%;
+  max-width: 650px;
+  padding: 1rem;
+  margin: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: #d6ddba;
+}
+
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.book-card {
+  width: 100px;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.book-card img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .book-section {
+    max-width: 100%;
+    margin: 10px;
+  }
+
+  .book-card {
+    width: 80px;
+  }
+
+  .book-list {
+    gap: 0.8rem;
+  }
+
+  .view-all-button {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-section {
+    padding: 0.8rem;
+  }
+
+  .book-card {
+    width: 70px;
+  }
+
+  .book-list {
+    justify-content: center;
+  }
+
+  .book-card img {
+    width: 80px;
+  }
+
+  .section-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .view-all-button {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
 }

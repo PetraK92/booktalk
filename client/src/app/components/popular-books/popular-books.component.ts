@@ -17,13 +17,10 @@ export class PopularBooksComponent implements OnInit {
   constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
-    this.bookService
-      .searchPopularBooks() // Metoden returnerar nu en lista med GoogleBookItem
-      .subscribe((res: GoogleBookItem[]) => {
-        // Prenumerera direkt på listan
-        this.popularBooks = res || []; // Sätt populära böcker till resultatet
-        console.log(this.popularBooks);
-      });
+    this.bookService.searchPopularBooks().subscribe((res: GoogleBookItem[]) => {
+      this.popularBooks = res || [];
+      console.log(this.popularBooks);
+    });
   }
 }
 export interface GoogleBooksApiResponse {
